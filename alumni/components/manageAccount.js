@@ -48,7 +48,31 @@ class ManageAccountContainer extends React.Component {
       this
     );
   }
+  
+  onSubmit = (e)=> {
+   
+    e.preventDefault();
+    // e.stopPropagation();
+    console.log(document.querySelector('#imageUpload'));
+    
+    $.ajax({
+      url: "functions/upload.php", // Url to which the request is send
+      type: "POST",             // Type of request to be send, called as method
+      data: new FormData(document.querySelector('#imageUpload')), // Data sent to server, a set of key/value pairs (i.e. form fields and values)
+      contentType: false,       // The content type used when sending data to the server.
+      cache: false,             // To unable request pages to be cached
+      processData:false,        // To send DOMDocument or non processed data file it is set to false
+      success: function(data)   // A function to be called if request succeeds
+      {
+        console.log(data)
+      }
+      });
+   
+    
+    // return false
+  }
   componentDidMount() {
+    let sup = this
     this.profile();
   }
 
@@ -69,17 +93,26 @@ class ManageAccountContainer extends React.Component {
           <div className="col-auto m-3">
             <div className="row d-flex justify-content-between mt-2">
               <form
-                
-                action="upload.php"
+                id = "imageUpload"
+                action=""
                 method="post"
-                enctype="multipart/form-data"
+                onSubmit = {(e)=>{
+                  console.log(e)
+                  this.onSubmit(e)
+                }}
+                encType="multipart/form-data"
               >
                 <div className="row">
-                  <label className = "d-flex justify-content-between" for="image">
+                  <label className = "d-flex justify-content-between" for="file">
                     <input
                       type="file"
-                      name="image"
-                      id="image"
+                      name="file"
+                      id="file"
+                      onChange = {(e)=>{
+                        $("#submit").click()
+                        
+                        // alert("changed")
+                      }}
                       style={{ display: "none" }}
                     />
                     <img
@@ -93,10 +126,12 @@ class ManageAccountContainer extends React.Component {
                 <div className="row mt-2">
                   <input
                     type="submit"
+                    id = "submit"
+
                     className="btn btn-sm"
                     value="Upload"
                     name="submit"
-                    style = {{width:"100px"}}
+                    style = {{width:"0",display:"none"}}
                   />
                 </div>
               </form>

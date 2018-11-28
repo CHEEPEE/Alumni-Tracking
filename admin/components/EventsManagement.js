@@ -95,6 +95,9 @@ class EventsList extends React.Component {
 
 class EventRequestList extends React.Component {
   state = {};
+  approveRequest =()=>{
+    
+  }
   componentDidMount(){
     getEventsRequest();
   }

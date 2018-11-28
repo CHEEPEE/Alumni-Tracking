@@ -50,11 +50,6 @@ if($requestType == "updateProfile"){
     }else {
         echo "Error: " . $query . "<br>" . $connect->error;
     }
-
 }
 
-
-function uploadImage(){
-
-}
 ?>

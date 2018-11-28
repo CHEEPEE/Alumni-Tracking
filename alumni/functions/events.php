@@ -21,4 +21,27 @@ if($requestType == "addEvent"){
         echo "Error: " . $query . "<br>" . $connect->error;
     }
 }
+
+if($requestType == "fetchEvents"){
+    include '../Database.php';
+    $sql = "select * from event where eventStatus = 'approved'";
+    $result = $connect->query($sql);
+    $arrayData = array();
+    class myObject
+    {
+        public $property1;
+    }
+    if ($result->num_rows >0) {
+        // code...
+        while ($row = $result->fetch_assoc()) {
+        // code...
+
+        $subject = new myObject();
+        $subject = $row;
+        $arrayData[]=$subject;
+        
+        }
+    }
+    echo json_encode($arrayData);
+}
 ?>
