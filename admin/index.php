@@ -56,16 +56,16 @@
                     <a class="dropdown-item" href="#"><small>Action</small></a>
                     <a class="dropdown-item" href="#"><small>Action</small></a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#"><small>Signout</small></a>
+                    <a href = "logout.php" class="dropdown-item"><small>Signout</small></a>
                 </div>
             </div>
         </div>
     </nav>
 
     <div class = "container-fluid zero">
-    <div class="row">
-        <div class="col-2 m-2">
-            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+    <div class="row w-100">
+        <div class="col-2 mt-2">
+            <div class="nav pl-2 flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home"
                     aria-selected="true">
                     <i class="material-icons align-middle mr-2">
@@ -88,12 +88,16 @@
                     aria-selected="false"><small>Menu menu</small></a>
             </div>
         </div>
-        <div class="col-9" id="mainContainer">
+        <div class="col-10" id="mainContainer">
 
         </div>
     </div>
     </div>
 </body>
+<script>
+let user_id = '<?php echo $_SESSION['user_id'];?>'
+let upload_dir =  "http://localhost/alumni-tracking-system/Alumni%20Tracking/upload/";
+</script>
 <script type="text/babel" src="../utils/utils.js"></script>
 <script type="text/babel" src="components/EventsManagement.js"></script>
 <script type="text/babel" src="mainContainer.js"></script>

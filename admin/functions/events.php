@@ -5,12 +5,13 @@ if($requestType == "addEvent"){
     $whatEvent = getValue('whatEvent');
     $whenEvent = getValue('whenEvent');
     $whereEvent = getValue('whereEvent');
+    $eventType =  getValue('eventType');
 
 
     $query = "insert into event(
-        whatEvent,whenEvent,whereEvent,eventStatus,user_id
+        whatEvent,whenEvent,whereEvent,eventStatus,user_id,eventType
         ) values (
-            '$whatEvent','$whenEvent','$whereEvent','approved','1'
+            '$whatEvent','$whenEvent','$whereEvent','approved','1','$eventType'
         )";
     
     if(mysqli_query($connect,$query)) 
@@ -44,6 +45,22 @@ if($requestType == "fetchEvents"){
     echo json_encode($arrayData);
 }
 
+if($requestType == "updateEvent"){
+    include '../Database.php';
+    $whereEvent = getValue("whereEvent");
+    $whatEvent = getValue("whatEvent");
+    $whenEvent = getValue("whenEvent");
+    $eventType = getValue("eventType");
+    $eventID = getValue("eventID");
+
+    $query = "update event set whatEvent = '$whatEvent',whenEvent = '$whenEvent',whereEvent = '$whereEvent',eventType = '$eventType' where eventID = '$eventID'";
+    if(mysqli_query($connect,$query)) 
+    {
+        echo 'success';
+    }else {
+        echo "Error: " . $query . "<br>" . $connect->error;
+    }
+}
 
 if($requestType == "fetchEventsRequest"){
     include '../Database.php';
@@ -68,6 +85,19 @@ if($requestType == "fetchEventsRequest"){
     echo json_encode($arrayData);
 }
 
+if($requestType == "approveEvent"){
+    include '../Database.php';
+    $status = getValue('status');
+    $eventID = getValue('eventId');
+    $sql = "update event set eventStatus = '$status' where eventID = '$eventID'";
+    if(mysqli_query($connect,$sql))
+    {
+        echo 'success';
+    
+    }else {
+        echo "Error: " . $sql . "<br>" . $connect->error;
+    }
+}
 
 
 if($requestType == "deleteEvent"){

@@ -1,11 +1,6 @@
 class ManageAccountContainer extends React.Component {
   state = {
-    tabs: [
-      <UpdateProfile />,
-      <UpdateWork />,
-      <UpdateBusiness />,
-      <UpdateSecurity />
-    ],
+    tabs: [<UpdateProfile />, <UpdateWork />, <UpdateBusiness />],
     tabIndex: 0
   };
   render() {
@@ -81,27 +76,6 @@ class ManageAccountContainer extends React.Component {
               </i>
               Business
             </div>
-            <div
-              className="nav-item nav-link"
-              id="nav-contact-tab"
-              data-toggle="tab"
-              role="tab"
-              onClick={() => {
-                this.setState({
-                  tabIndex: 3
-                });
-              }}
-              aria-controls="nav-contact"
-              aria-selected="false"
-            >
-              <i
-                style={{ fontSize: "18px" }}
-                className="material-icons align-middle mr-2"
-              >
-                security
-              </i>
-              Security
-            </div>
           </div>
         </nav>
         {this.state.tabs[this.state.tabIndex]}
@@ -117,8 +91,7 @@ class UpdateProfile extends React.Component {
     confirmPassword: "",
     isPasswordConfirm: true,
     passwordError: "",
-    photo: "../assets/images/placeholder.png",
-    photoName: ""
+    photo: "../assets/images/placeholder.png"
   };
 
   getProfile(data, args) {
@@ -128,9 +101,6 @@ class UpdateProfile extends React.Component {
       ...profile
     });
     console.log(profile);
-    args.setState({
-      photo: upload_dir + profile.photo
-    });
   }
 
   putState(property, value) {}
@@ -153,9 +123,7 @@ class UpdateProfile extends React.Component {
 
   updateProfile() {
     ajaxHandler({ ...this.state, requestType: "updateProfile" }, data => {
-      if (data == "success") {
-        alert("Account Updated");
-      }
+      console.log(data);
       this.profile;
     });
     console.log(this.state);
@@ -186,8 +154,7 @@ class UpdateProfile extends React.Component {
       ) {
         console.log(data);
         sup.setState({
-          photo: upload_dir + data,
-          photoName: data
+          photo: upload_dir + data
         });
       }
     });
@@ -256,18 +223,6 @@ class UpdateProfile extends React.Component {
           <div className="col">
             <div className="row">
               <div className="col">
-                <div class="form-group">
-                  <small class="form-text font-weight-bold text-muted">
-                    Student ID
-                  </small>
-                  <input
-                    disabled
-                    type="email"
-                    value={this.state.student_id}
-                    class="form-control mt-1 form-control-sm"
-                    aria-describedby="emailHelp"
-                  />
-                </div>
                 <div class="form-group">
                   <small class="form-text font-weight-bold text-muted">
                     First Name
@@ -348,7 +303,7 @@ class UpdateProfile extends React.Component {
                     aria-describedby="emailHelp"
                   />
                 </div>
-                {/* <div class="form-group">
+                <div class="form-group">
                   <small class="form-text font-weight-bold text-muted">
                     Password
                   </small>
@@ -379,33 +334,26 @@ class UpdateProfile extends React.Component {
                   {this.state.isPasswordConfirm
                     ? ""
                     : errorHandler(this.state.passwordError)}
-                </div> */}
+                </div>
               </div>
               <div className="col">
                 <div class="form-group">
                   <small class="form-text font-weight-bold text-muted">
+                    Student ID
+                  </small>
+                  <input
+                    disabled
+                    type="email"
+                    value={this.state.student_id}
+                    class="form-control mt-1 form-control-sm"
+                    aria-describedby="emailHelp"
+                  />
+                </div>
+                <div class="form-group">
+                  <small class="form-text font-weight-bold text-muted">
                     Gender
                   </small>
-                  <select
-                    id="gender"
-                    className="form-control form-control-sm"
-                    onChange={text => {
-                      $("#gender").on("change", function() {
-                        $("option:selected", this)
-                          .hide()
-                          .siblings()
-                          .show();
-                      });
-                      this.setState({
-                        gender: text.target.value
-                      });
-                    }}
-                    defaultValue={this.state.gender}
-                  >
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                  </select>
-                  {/* <input
+                  <input
                     type="email"
                     onChange={text => {
                       this.setState({
@@ -415,7 +363,7 @@ class UpdateProfile extends React.Component {
                     defaultValue={this.state.gender}
                     class="form-control mt-1 form-control-sm"
                     aria-describedby="emailHelp"
-                  /> */}
+                  />
                 </div>
                 <div class="form-group">
                   <small class="form-text font-weight-bold text-muted">
@@ -433,7 +381,7 @@ class UpdateProfile extends React.Component {
                     aria-describedby="emailHelp"
                   />
                 </div>
-                {/* <div class="form-group">
+                <div class="form-group">
                   <small class="form-text font-weight-bold text-muted">
                     Age
                   </small>
@@ -442,7 +390,7 @@ class UpdateProfile extends React.Component {
                     class="form-control mt-1 form-control-sm"
                     aria-describedby="emailHelp"
                   />
-                </div> */}
+                </div>
                 <div class="form-group">
                   <small class="form-text font-weight-bold text-muted">
                     Current Address
@@ -479,32 +427,7 @@ class UpdateProfile extends React.Component {
                   <small class="form-text font-weight-bold text-muted">
                     Couse
                   </small>
-                  <select
-                    id="course"
-                    onChange={text => {
-                      $("#course").on("change", function() {
-                        $("option:selected", this)
-                          .hide()
-                          .siblings()
-                          .show();
-                      });
-                      this.setState({
-                        course: text.target.value
-                      });
-                    }}
-                    defaultValue={this.state.last_name}
-                    id="course"
-                    className="form-control form-control-sm"
-                  >
-                    <option value="BSIT">
-                      Bachelor Of Inforamation Technology
-                    </option>
-                    <option value="BSCS">Bacherlor Of Computer Science</option>
-                    <option value="BSIS">
-                      Bacherlor Of Information System
-                    </option>
-                  </select>
-                  {/* <input
+                  <input
                     type="email"
                     onChange={text => {
                       this.setState({
@@ -514,7 +437,7 @@ class UpdateProfile extends React.Component {
                     defaultValue={this.state.last_name}
                     class="form-control mt-1 form-control-sm"
                     aria-describedby="emailHelp"
-                  /> */}
+                  />
                 </div>
                 <div class="form-group">
                   <small class="form-text font-weight-bold font-weight-bold text-muted">
@@ -644,163 +567,16 @@ class UpdateWork extends React.Component {
   }
 }
 
-class UpdateSecurity extends React.Component {
-  state = {
-    oldPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-    alert: "",
-    success:""
-  };
-
-  updatePassword = ()=> {
-    ajaxHandler({requestType:"changePassword",oldPassword:this.state.oldPassword,newPassword:this.state.newPassword},(data)=>{
-      console.log(data)
-      if(data.trim()=='success'){
-        this.setState({
-          success:"Updated Successfully"
-        })
-        document.querySelector("#newPassword").value = ""
-        document.querySelector("#confrimPassword").value = ""
-        document.querySelector("#oldPassword").value = ""
-      }else{
-        this.setState({
-          alert:data
-        })
-      }
-    })
-  }
-
-  confirmPassword() {
-    let newPassword = document.querySelector("#newPassword").value;
-    let confirmPassword = document.querySelector("#confrimPassword").value;
-
-    if (newPassword != confirmPassword) {
-      this.setState({
-        alert: "Password doesn't match"
-      });
-    } else {
-      this.setState({
-        alert: ""
-      });
-    }
-  }
-  render() {
-    return (
-      <React.Fragment>
-        <div className="row mt-3 text-dark">
-          <div className="col">
-            <h5> Update Account Security </h5>
-          </div>
-        </div>
-        <div className="row w-50 mt-3">
-          <div className="col">
-            {" "}
-            {/* d-flex justify-content-center */}
-            <div className="row">
-              <div className="col">
-                <div class="form-group">
-                  <small class="form-text font-weight-bold text-muted">
-                    Old Password
-                  </small>
-                  <input
-                    id="oldPassword"
-                    type="password"
-                    onChange={text => {
-                      this.setState({
-                        oldPassword: text.target.value
-                      });
-                      // this.confirmPassword();
-                    }}
-                    defaultValue={this.state.oldPassword}
-                    class="form-control mt-1 form-control-sm"
-                    aria-describedby="emailHelp"
-                  />
-                </div>
-                <div class="form-group">
-                  <small class="form-text font-weight-bold text-muted">
-                    New Password
-                  </small>
-                  <input
-                    id="newPassword"
-                    type="password"
-                    onChange={text => {
-                      this.setState({
-                        newPassword: text.target.value
-                      });
-                      this.confirmPassword();
-                    }}
-                    defaultValue={this.state.newPassword}
-                    class="form-control mt-1 form-control-sm"
-                    aria-describedby="emailHelp"
-                  />
-                </div>
-                <div class="form-group">
-                  <small class="form-text font-weight-bold text-muted">
-                    Confirm new Password
-                  </small>
-                  <input
-                    id="confrimPassword"
-                    type="password"
-                    onChange={text => {
-                      this.setState({
-                        confirmPassword: text.target.value
-                      });
-                      this.confirmPassword();
-                    }}
-                    defaultValue={this.state.confirmPassword}
-                    class="form-control mt-1 form-control-sm"
-                    aria-describedby="emailHelp"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row w-50 mt-3 mb-5">
-          <div className="col d-flex justify-content-center">
-            <button
-              type="button"
-              onClick={() => this.updatePassword()}
-              class="btn btn-primary"
-            >
-              Update Password
-            </button>
-          </div>
-        </div>
-        <div className="row w-50">
-          <div className="col">
-            <small>
-              {this.state.alert == "" ? "" : errorHandler(this.state.alert)}
-              {this.state.success == "" ? "" : successHandler(this.state.success)}
-            </small>
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  }
-}
-
 class UpdateBusiness extends React.Component {
+  state = {};
   render() {
     return (
       <React.Fragment>
-        <div className="row mt-3 text-dark">
-          <div className="col">
-            <h5> Update Business </h5>
-          </div>
-        </div>
+        <div className="row">update Business</div>
       </React.Fragment>
     );
   }
 }
-const successHandler = success => {
-  return (
-    <div className="alert mt-2 alert-success" role="alert">
-      <small> {success}</small>
-    </div>
-  );
-};
 
 const errorHandler = error => {
   return (

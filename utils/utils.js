@@ -10,10 +10,11 @@ function ajaxHandler(objectData, callback,state) {
 }
 
 function isSuccess(data) {
+  console.log(data)
   if (data.trim() == "success") {
     return true;
   }
-  alert(data);
+  console.log(data)
 }
 
 function clearValue(data) {

@@ -16,8 +16,8 @@ if($requestType == "addUser"){
     $now = DateTime::createFromFormat('U.u', microtime(true));
     $timeStamp = $now->format("YmdHisu");
     if(isIdAvailable($studentId)){
-        $query = "INSERT INTO alumni(user_id,first_name,middle_name,last_name,email,number,birthdate,gender,address,permanent_address,course) 
-    VALUES ($studentId,'$fName','$mName','$lName','$email','$contact','$birthDate','$gender','$address','$permaAddress','$course')";
+        $query = "INSERT INTO alumni(user_id,first_name,middle_name,last_name,email,number,birthdate,gender,address,permanent_address,course,photo) 
+    VALUES ($studentId,'$fName','$mName','$lName','$email','$contact','$birthDate','$gender','$address','$permaAddress','$course','placeholder.png')";
     if(mysqli_query($connect,$query)) 
     {
         echo 'success';
@@ -29,6 +29,30 @@ if($requestType == "addUser"){
     }else{
         echo "idTaken";
     }
+}
+
+if($requestType == "getProfile"){
+    include '../Database.php';
+    $user_id = getValue('user_id');
+    $sql = "select * from alumni where user_id = '$user_id'";
+    $result = $connect->query($sql);
+    $arrayData;
+    class myObject
+    {
+        public $property1;
+    }
+    if ($result->num_rows >0) {
+        // code...
+        while ($row = $result->fetch_assoc()) {
+        // code...
+
+        $subject = new myObject();
+        $subject = $row;
+        $arrayData=$subject;
+        
+        }
+    }
+    echo json_encode($arrayData);
 }
 
 if($requestType == "fetchAlumni"){
@@ -48,13 +72,15 @@ if($requestType == "fetchAlumni"){
 
         $subject = new myObject();
         $subject = $row;
-        $arrayData[]=$subject;
+        if($row['user_id']!=1){
+            $arrayData[]=$subject;
+        }
+      
         
         }
     }
     echo json_encode($arrayData);
 }
-
 
 function insertIntoUsers($username,$password,$user_id){
     include '../Database.php';
@@ -67,4 +93,5 @@ function insertIntoUsers($username,$password,$user_id){
         echo "Error: " . $query . "<br>" . $connect->error;
     }
 }
+
 ?>

@@ -1,29 +1,23 @@
 class EventsContainer extends React.Component {
   state = {
-    event: {
-      eventID: ""
-    }
+    event: {}
   };
   onSubmit = () => {
     let whatEvent = document.querySelector("#whatEvent").value;
     let whenEvent = document.querySelector("#whenEvent").value;
     let whereEvent = document.querySelector("#whereEvent").value;
-    let eventType = document.querySelector("#eventType").value;
     let requestType = { requestType: "addEvent" };
     let event = {
       ...requestType,
       whatEvent: whatEvent,
       whenEvent: whenEvent,
-      whereEvent: whereEvent,
-      eventType: eventType
+      whereEvent: whereEvent
     };
 
     ajaxHandler(event, data => {
       if (isSuccess(data)) {
         // getEvents();
-
         clearValue(event);
-        $("#exampleModalCenter").modal("hide");
       }
     });
   };
@@ -72,7 +66,7 @@ const AddEventModal = props => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalCenterTitle">
-              Add Event/Advertisement
+              Add Event
             </h5>
             <button
               type="button"
@@ -134,39 +128,6 @@ const AddEventModal = props => {
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col">
-                    <div class="form-group">
-                      <small class="form-text font-weight-bold text-muted">
-                        Announcement Type
-                      </small>
-                      <select
-                        id="eventType"
-                        className="form-control form-control-sm"
-                        onChange={text => {
-                          $("#eventType").on("change", function() {
-                            $("option:selected", this)
-                              .hide()
-                              .siblings()
-                              .show();
-                          });
-                          // this.setState({
-                          //   gender: text.target.value
-                          // });
-                        }}
-                        // defaultValue = {"Choose Advertisement Type . . ."}
-                      >
-                        {/* <option selected>Choose Advertisement Type . . .</option> */}
-                        <option value="Announcement/Events">
-                          Announcement/Events
-                        </option>
-                        <option value="Job Opportunities">
-                          Job Opportunities
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
               </form>
             </div>
           </div>
@@ -193,64 +154,36 @@ const AddEventModal = props => {
   );
 };
 
-
-
 class EventsItemList extends React.Component {
-  state = {};
-  setProfile(data, args) {
-    let profile = JSON.parse(data);
-    args.setState({
-      ...args.state,
-      ...profile
-    });
-    console.log(profile);
-    args.setState({
-      photo: upload_dir + profile.photo
-    });
-  }
-  getUser() {
-    let userId = this.props.item.user_id;
-    ajaxHandler(
-      { requestType: "getProfile", user_id: userId },
-      this.setProfile,
-      this
-    );
-  }
-  componentDidMount() {
-    this.getUser();
-  }
   render() {
     return (
-      <React.Fragment>
-        <div className="container ml-3 mt-2 w-100 border-bottom pb-2">
-          <div className="row">
-            <small>
-              from <a className="text-primary">@{this.state.first_name}</a>
-            </small>
-            {this.props.item.eventType == "" ? (
-              ""
-            ) : (
-              <span class="ml-2 badge badge-info">
-                <small>{this.props.item.eventType}</small>
-              </span>
-            )}
-          </div>
-          <div className="row">
-            <h5>
-              {this.props.item.whenEvent} @ {this.props.item.whereEvent}
-            </h5>
-          </div>
-          <div className="row">{this.props.item.whatEvent}</div>
-          <div className="row mt-2 d-flex flex-row-reverse bd-highlight" />
+      <div className="container mt-2 w-100 border-bottom pb-2">
+        <div className = "row">
+        <small>from @username</small>
         </div>
-        {/* <UpdateEventModal event = {this.props.item} eventID={this.props.item.eventID} /> */}
-      </React.Fragment>
+        <div className="row">
+          <h5>
+            {this.props.item.whenEvent} @ {this.props.item.whereEvent}
+          </h5>
+        </div>
+        <div className="row">{this.props.item.whatEvent}</div>
+        <div className="row mt-2 d-flex flex-row-reverse bd-highlight">
+          <button
+            type="button"
+            className="btn btn-sm btn-danger "
+            onClick={() => this.props.removeEvent(this.props.item)}
+          >
+            Delete Event
+          </button>
+        </div>
+      </div>
     );
   }
 }
 
 function renderEvents(data) {
   console.log(data);
+
   var listItem = JSON.parse(data).map(function(object, index) {
     return (
       <EventsItemList
