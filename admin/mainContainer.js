@@ -1,13 +1,263 @@
+let chart;
+let employmentChart;
 class DashboardContainer extends React.Component {
-  state = {};
+  state = {
+    categories: [],
+    counterData: [],
+    initializeGraph: true,
+    employed: 0,
+    graduates: 100
+  };
+  loadGraph = (labels, data) => {
+    let context = this;
+    let canvas = document.getElementById("chart");
+    let ctx = canvas.getContext("2d");
+    let employmentChartCtx = document
+      .getElementById("employmentChart")
+      .getContext("2d");
+
+    let dataSet = {
+      // The type of chart we want to create
+      type: "pie",
+      // The data for our dataset
+      data: {
+        labels: labels,
+        datasets: []
+      },
+
+      // Configuration options go here
+      options: {
+        responsive: true,
+        legend: { position: "right" },
+        tooltips: { intersect: true, mode: "point" }
+      }
+    };
+
+    let employementChartDataSet = {
+      // The type of chart we want to create
+      type: "pie",
+      // The data for our dataset
+      data: {
+        labels: [
+          `Employed (${context.state.employed})`,
+          `Unemployed (${context.state.graduates - context.state.employed})`
+        ],
+        datasets: [
+          {
+            label: "Employement",
+            backgroundColor: ["#4dc9f6", "#58595b"],
+            data: [
+              context.state.employed,
+              context.state.graduates - context.state.employed
+            ]
+          }
+        ]
+      },
+
+      // Configuration options go here
+      options: {
+        responsive: true,
+        legend: { position: "right" },
+        tooltips: { intersect: true, mode: "point" }
+      }
+    };
+    console.log(data.length);
+    if (data.length != 0) {
+      chart = new Chart(ctx, dataSet);
+      employmentChart = new Chart(employmentChartCtx, employementChartDataSet);
+      // chart.data.labels.pop();
+      // chart.data.datasets.forEach((dataset) => {
+      //     dataset.data.pop();
+      // });
+
+      dataSet.data.datasets.push({
+        label: "My First dataset",
+        backgroundColor: [
+          "#4dc9f6",
+          "#f67019",
+          "#f53794",
+          "#537bc4",
+          "#acc236",
+          "#166a8f",
+          "#00a950",
+          "#58595b",
+          "#8549ba"
+        ],
+        data: data
+      });
+      employmentChart.update();
+      chart.update();
+    }
+  };
+
+  getPercentage(number, total) {
+    return (number / total) * 100;
+  }
+  getStats = (course = "") => {
+    let context = this;
+    let counterData = [];
+    let categories = [];
+    let totalCount = 0;
+    let graduates = 0;
+    ajaxHandler(
+      { requestType: "getGraduates", course: course },
+      data => {
+        let count = JSON.parse(data);
+        console.log(count);
+        graduates = count.count;
+        context.setState({
+          graduates: count.count
+        });
+        employmentChart.update();
+      },
+      this
+    );
+    ajaxHandler(
+      { requestType: "getStats", course: course },
+      data => {
+        console.log(data);
+        JSON.parse(data).map(function(object, index) {
+          totalCount += Number(object.count);
+        });
+        JSON.parse(data).map(function(object, index) {
+          categories.push(`${object.category} (${object.count})`);
+
+          counterData.push(object.count);
+        });
+        let listItem = JSON.parse(data).map(function(object, index) {
+          return (
+            <React.Fragment>
+              <div className="row mb-2">
+                <div className="col text-success font-weight-bold">
+                  <small> {`${object.category}`}</small>
+                </div>
+                <div className="col text-center">
+                  <span class="badge badge-light p-2">
+                    <small> {`${object.count}`}</small>
+                  </span>
+                </div>
+                <div className="col text-center">
+                  <span class="badge badge-light p-1 w-25">
+                    <small>
+                      {" "}
+                      {`${context.getPercentage(object.count, totalCount)}%`}
+                    </small>
+                  </span>
+                </div>
+              </div>
+            </React.Fragment>
+          );
+        });
+        context.setState({
+          counterData: counterData,
+          categories: categories,
+          employed: totalCount
+        });
+        // **this should render list of categories percentage and count
+
+        // ReactDOM.render(
+        //   <React.Fragment>{listItem}</React.Fragment>,
+        //   document.querySelector("#jobstats")
+        // );
+        if (context.state.initializeGraph) {
+          context.loadGraph(categories, counterData);
+          context.setState({
+            initializeGraph: false
+          });
+        } else {
+          setTimeout(function() {
+            context.updateGraphData(categories, counterData);
+          }, 500);
+        }
+      },
+      this
+    );
+  };
+
+  updateGraphData(label, counterData) {
+    let context = this;
+    chart.data.datasets[0].data = counterData;
+    employmentChart.data.labels = [
+      `Employed (${context.state.employed})`,
+      `Unemployed (${context.state.graduates - context.state.employed})`
+    ];
+    employmentChart.data.datasets[0].data = [
+      this.state.employed,
+      this.state.graduates - this.state.employed
+    ];
+    employmentChart.update();
+    chart.update();
+    // chart.data.labels.push("labels");
+    // chart.data.datasets.forEach((dataset) => {
+    //     dataset.data.push(1);
+    // });
+  }
+  componentDidMount() {
+    this.getStats();
+  }
   render() {
-    return <React.Fragment>Dashboard</React.Fragment>;
+    return (
+      <React.Fragment>
+        <div className="row">
+          <div className="col">
+            <h1>Dashboard</h1>
+          </div>
+        </div>
+        <div className="row w-100 border-bottom border-muted mb-2 pb-1">
+          <div className="col text-primary">
+            <h3>Employment Demographics</h3>
+          </div>
+          <div className="col">
+            <select
+              onChange={text => {
+                this.getStats(text.target.value);
+              }}
+              className="form-control form-control-sm"
+            >
+              <option value="">All Course</option>
+              <option value="BSIT">BS Inforamation Technology</option>
+              <option value="BSCS">BS Computer Science</option>
+              <option value="BSIS">BS Inforamation System</option>
+            </select>
+          </div>
+        </div>
+        <div className="row pt-2">
+          <div className="col bg-light shadow-sm p-3 m-1">
+            <div className="row">
+              <div className="col">
+                <h5>Demographic Title</h5>
+              </div>
+            </div>
+            <canvas id="chart" />
+          </div>
+          <div className="col bg-light shadow-sm p-3 m-1">
+            <div className="row">
+              <div className="col">
+                <h5>Demographic Title</h5>
+              </div>
+              <canvas id="employmentChart" />
+            </div>
+          </div>
+          {/* <div className="col" id="jobstats" /> */}
+        </div>
+        <div className="row">
+          <div className="col shadow-sm p-3">
+            <div className="row">
+              <div className="col">
+                <h5>Employement Demographic</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
+    );
   }
 }
 
 class UserManagementContainer extends React.Component {
   state = {};
   fetchUsers() {
+    let sup = this;
     $.ajax({
       type: "Post",
       url: "functions/index.php",
@@ -31,6 +281,8 @@ class UserManagementContainer extends React.Component {
               studentId={object.user_id}
               address={object.address}
               course={object.course}
+              photo={object.photo}
+              fetchUsers = {sup.fetchUsers}
             />
           );
         });
@@ -100,8 +352,11 @@ class UserManagementContainer extends React.Component {
           <div className="col font-weight-bold">
             <small>Address</small>
           </div>
-          <div className="col font-weight-bold">
+          <div className="col-1 font-weight-bold">
             <small>Course</small>
+          </div>
+          <div className="col-1 font-weight-bold">
+            <small />
           </div>
         </div>
         <div className="w-100" id="studentListContainer" />
@@ -175,14 +430,12 @@ class AddUserModal extends React.Component {
     // document.querySelector("#fName").value = "";
     // document.querySelector("#mName").value = "";
     // document.querySelector("#lName").value = "";
-   
     // document.querySelector("#contactNumber").value = "";
     // document.querySelector("#gender").value = "";
     // document.querySelector("#address").value = "";
     // document.querySelector("#permanentAddress").value = "";
     // document.querySelector("#course").value = "";
     // document.querySelector("#birthDate").value = "";
- 
   }
   addUser() {
     let sup = this;
@@ -294,7 +547,7 @@ class AddUserModal extends React.Component {
                     onSubmit={e => {
                       e.preventDefault();
                       // this.register()
-                      this.addUser()
+                      this.addUser();
                     }}
                   >
                     <div className="form-group">
@@ -319,7 +572,7 @@ class AddUserModal extends React.Component {
                       <label for="exampleInputEmail1">Email address</label>
                       <input
                         type="email"
-                        id = "email"
+                        id="email"
                         className="form-control form-control-sm"
                         onChange={text => {
                           this.setState({
@@ -332,7 +585,6 @@ class AddUserModal extends React.Component {
                         required
                       />
                     </div>
-
                     {/* {this.state.alert.trim().length==0?"":errorHandler(this.state.alert)} */}
                     <button type="submit" className="btn btn-sm btn-primary">
                       Register
@@ -350,14 +602,36 @@ class AddUserModal extends React.Component {
 
 class AlumniListItem extends React.Component {
   state = {};
+  deleteUser = () => {
+    if (confirm("Delete Alumni")) {
+      ajaxHandler(
+        { user_id: this.props.studentId, requestType: "deleteProfile" },
+        data => {
+          console.log(data);
+          this.props.fetchUsers();
+        }
+      );
+    }
+  };
   render() {
     return (
       <React.Fragment>
-        <div className="row w-100 border-bottom pb-2">
-          <div className="col-2  font-weight-light text-truncate">
-            <small>{this.props.studentId}</small>
+        <div className="row w-100 border-bottom pt-2 pb-2">
+          <div className="col-2  text-truncate">
+            <small className="font-weight-bold text-dark">
+              {this.props.studentId}
+            </small>
           </div>
           <div className="col  font-weight-light text-truncate">
+            <img
+              width="25em"
+              height="25em"
+              className="rounded-circle mr-1"
+              src={
+                upload_dir +
+                (this.props.photo == "" ? "placeholder.png" : this.props.photo)
+              }
+            />{" "}
             <small>{this.props.username}</small>
           </div>
           <div className="col  font-weight-light text-truncate">
@@ -366,8 +640,19 @@ class AlumniListItem extends React.Component {
           <div className="col font-weight-light text-truncate">
             <small>{this.props.address}</small>
           </div>
-          <div className="col font-weight-light text-truncate">
+          <div className="col-1 font-weight-light text-truncate">
             <small>{this.props.course}</small>
+          </div>
+          <div className="col-1">
+            <button
+              type="button"
+              onClick={() => {
+                this.deleteUser();
+              }}
+              className="btn btn-danger"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </React.Fragment>
@@ -411,7 +696,7 @@ class MainContainer extends React.Component {
             role="tabpanel"
             aria-labelledby="v-pills-settings-tab"
           >
-            ...
+            <EtcContainer />
           </div>
         </div>
       </React.Fragment>

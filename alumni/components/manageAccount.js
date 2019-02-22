@@ -118,7 +118,9 @@ class UpdateProfile extends React.Component {
     isPasswordConfirm: true,
     passwordError: "",
     photo: "../assets/images/placeholder.png",
-    photoName: ""
+    photoName: "",
+    batch: "",
+    is_graduate:"false"
   };
 
   getProfile(data, args) {
@@ -127,9 +129,13 @@ class UpdateProfile extends React.Component {
       ...args.state,
       ...profile
     });
+    $("#gender").val(profile.gender);
+    $("#course").val(profile.course);
+    $("#userType").val(profile.is_graduate);
     console.log(profile);
     args.setState({
-      photo: upload_dir + profile.photo
+      photo: upload_dir + profile.photo,
+      photoName: profile.photo
     });
   }
 
@@ -388,7 +394,7 @@ class UpdateProfile extends React.Component {
                   </small>
                   <select
                     id="gender"
-                    className="form-control form-control-sm"
+                    className="form-control mt-1 form-control-sm"
                     onChange={text => {
                       $("#gender").on("change", function() {
                         $("option:selected", this)
@@ -402,6 +408,7 @@ class UpdateProfile extends React.Component {
                     }}
                     defaultValue={this.state.gender}
                   >
+                    <option>...</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                   </select>
@@ -494,14 +501,18 @@ class UpdateProfile extends React.Component {
                     }}
                     defaultValue={this.state.last_name}
                     id="course"
-                    className="form-control form-control-sm"
+                    className="form-control mt-1 form-control-sm"
                   >
+                    {" "}
+                    <option>...</option>
                     <option value="BSIT">
-                      Bachelor Of Inforamation Technology
+                      Bachelor Of Science in Inforamation Technology
                     </option>
-                    <option value="BSCS">Bacherlor Of Computer Science</option>
+                    <option value="BSCS">
+                      Bachelor Of Science in Computer Science
+                    </option>
                     <option value="BSIS">
-                      Bacherlor Of Information System
+                      Bachelor Of Science in Information System
                     </option>
                   </select>
                   {/* <input
@@ -518,10 +529,36 @@ class UpdateProfile extends React.Component {
                 </div>
                 <div class="form-group">
                   <small class="form-text font-weight-bold font-weight-bold text-muted">
+                    User Type
+                  </small>
+                  <select
+                    id="userType"
+                    onChange={text => {
+                      this.setState({
+                        is_graduate: text.target.value
+                      });
+                    }}
+                    defaultValue={this.state.is_graduate}
+                    className="form-control mt-1 form-control-sm"
+                  >
+                    {" "}
+                    <option value="false">Student</option>
+                    <option value="true">Alumni</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <small class="form-text font-weight-bold font-weight-bold text-muted">
                     Batch
                   </small>
+               
                   <input
-                    type="email"
+                    type="text"
+                    onChange={e => {
+                      this.setState({
+                        batch: e.target.value
+                      });
+                    }}
+                    defaultValue={this.state.batch}
                     class="form-control mt-1 form-control-sm"
                     aria-describedby="emailHelp"
                   />
@@ -546,130 +583,39 @@ class UpdateProfile extends React.Component {
   }
 }
 
-class UpdateWork extends React.Component {
-  state = {};
-  render() {
-    return (
-      <React.Fragment>
-        <div className="row">
-          <div className="col">
-            <h5> Update Work </h5>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col p-3">
-            <div class="form-group">
-              <small class="form-text font-weight-bold text-muted">
-                Job Position
-              </small>
-              <input
-                type="text"
-                defaultValue={this.state.first_name}
-                class="form-control mt-1 form-control-sm"
-                aria-describedby="emailHelp"
-              />
-            </div>
-            <div class="form-group">
-              <small class="form-text font-weight-bold text-muted">
-                Job Title
-              </small>
-              <input
-                type="text"
-                defaultValue={this.state.first_name}
-                class="form-control mt-1 form-control-sm"
-                aria-describedby="emailHelp"
-              />
-            </div>
-            <div class="form-group">
-              <small class="form-text font-weight-bold text-muted">
-                Job Salary
-              </small>
-              <input
-                type="text"
-                defaultValue={this.state.first_name}
-                class="form-control mt-1 form-control-sm"
-                aria-describedby="emailHelp"
-              />
-            </div>
-          </div>
-          <div className="col p-3">
-            <div class="form-group">
-              <small class="form-text font-weight-bold text-muted">
-                Job Started
-              </small>
-              <input
-                type="text"
-                defaultValue={this.state.first_name}
-                class="form-control mt-1 form-control-sm"
-                aria-describedby="emailHelp"
-              />
-            </div>
-            <div class="form-group">
-              <small class="form-text font-weight-bold text-muted">
-                Job End
-              </small>
-              <input
-                type="text"
-                defaultValue={this.state.first_name}
-                class="form-control mt-1 form-control-sm"
-                aria-describedby="emailHelp"
-              />
-            </div>
-            <div class="form-group">
-              <small class="form-text font-weight-bold text-muted">
-                Job Inline
-              </small>
-              <input
-                type="text"
-                defaultValue={this.state.first_name}
-                class="form-control mt-1 form-control-sm"
-                aria-describedby="emailHelp"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="row mt-3 mb-5">
-          <div className="col d-flex justify-content-center">
-            <button
-              type="button"
-              onClick={() => this.updateProfile()}
-              class="btn btn-primary"
-            >
-              Update Job Description
-            </button>
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  }
-}
-
 class UpdateSecurity extends React.Component {
   state = {
     oldPassword: "",
     newPassword: "",
     confirmPassword: "",
     alert: "",
-    success:""
+    success: ""
   };
 
-  updatePassword = ()=> {
-    ajaxHandler({requestType:"changePassword",oldPassword:this.state.oldPassword,newPassword:this.state.newPassword},(data)=>{
-      console.log(data)
-      if(data.trim()=='success'){
-        this.setState({
-          success:"Updated Successfully"
-        })
-        document.querySelector("#newPassword").value = ""
-        document.querySelector("#confrimPassword").value = ""
-        document.querySelector("#oldPassword").value = ""
-      }else{
-        this.setState({
-          alert:data
-        })
+  updatePassword = () => {
+    ajaxHandler(
+      {
+        requestType: "changePassword",
+        oldPassword: this.state.oldPassword,
+        newPassword: this.state.newPassword
+      },
+      data => {
+        console.log(data);
+        if (data.trim() == "success") {
+          this.setState({
+            success: "Updated Successfully"
+          });
+          document.querySelector("#newPassword").value = "";
+          document.querySelector("#confrimPassword").value = "";
+          document.querySelector("#oldPassword").value = "";
+        } else {
+          this.setState({
+            alert: data
+          });
+        }
       }
-    })
-  }
+    );
+  };
 
   confirmPassword() {
     let newPassword = document.querySelector("#newPassword").value;
@@ -772,7 +718,9 @@ class UpdateSecurity extends React.Component {
           <div className="col">
             <small>
               {this.state.alert == "" ? "" : errorHandler(this.state.alert)}
-              {this.state.success == "" ? "" : successHandler(this.state.success)}
+              {this.state.success == ""
+                ? ""
+                : successHandler(this.state.success)}
             </small>
           </div>
         </div>
@@ -781,19 +729,14 @@ class UpdateSecurity extends React.Component {
   }
 }
 
-class UpdateBusiness extends React.Component {
+class OptionItem extends React.Component {
   render() {
     return (
-      <React.Fragment>
-        <div className="row mt-3 text-dark">
-          <div className="col">
-            <h5> Update Business </h5>
-          </div>
-        </div>
-      </React.Fragment>
+      <option value={this.props.value.id}>{this.props.value.category}</option>
     );
   }
 }
+
 const successHandler = success => {
   return (
     <div className="alert mt-2 alert-success" role="alert">

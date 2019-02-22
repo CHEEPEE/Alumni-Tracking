@@ -222,10 +222,10 @@ class EventsItemList extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <div className="container ml-3 mt-2 w-100 border-bottom pb-2">
+        <div className="container ml-3 mt-2 w-100 pb-2">
           <div className="row">
             <small>
-              from <a className="text-primary">@{this.state.first_name}</a>
+              from <a className="text-primary font-weight-bold">@{this.state.first_name}</a>
             </small>
             {this.props.item.eventType == "" ? (
               ""
@@ -235,12 +235,16 @@ class EventsItemList extends React.Component {
               </span>
             )}
           </div>
-          <div className="row">
+          <div className="row mt-2">
             <h5>
               {this.props.item.whenEvent} @ {this.props.item.whereEvent}
             </h5>
           </div>
-          <div className="row">{this.props.item.whatEvent}</div>
+          <div className="row border bg-light rounded border-muted p-2">
+            <div className = "col">
+            {this.props.item.whatEvent}
+            </div>
+          </div>
           <div className="row mt-2 d-flex flex-row-reverse bd-highlight" />
         </div>
         {/* <UpdateEventModal event = {this.props.item} eventID={this.props.item.eventID} /> */}

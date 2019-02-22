@@ -21,6 +21,9 @@
             width:100px;
             height:100px;
         }
+        body{
+            height:100vh;
+        }
     </style>
 </head>
 
@@ -66,9 +69,9 @@
             </div>
         </div>
     </nav>
-    <div class = "container-fluid zero">
-        <div class="row w-100">
-            <div class="col-2 m-2">
+    <div class = "container-fluid zero h-100">
+        <div class="row h-100 w-100">
+            <div class="col-2 pl-2">
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home"
                         aria-selected="true">
@@ -94,7 +97,7 @@
                         </i><small> About UA-CCS</small></a>
                 </div>
             </div>
-            <div class="col-9" id="mainContainer">
+            <div class="col-10 zero" id="mainContainer">
 
             </div>
         </div>
@@ -107,8 +110,10 @@ let upload_dir =  "http://localhost/alumni-tracking-system/Alumni%20Tracking/upl
 </script>
 <script type="text/babel" src="../utils/utils.js"></script>
 <script type="text/babel" src="components/manageAccount.js"></script>
+<script type="text/babel" src="components/work.js"></script>
 <script type="text/babel" src="components/events.js"></script>
-
+<script type="text/babel" src="components/home.js"></script>
+<script type="text/babel" src="components/business.js"></script>
 <!-- always under -->
 <script type="text/babel" src="components/main.js"></script>
 

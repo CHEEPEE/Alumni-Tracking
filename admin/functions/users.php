@@ -16,8 +16,8 @@ if($requestType == "addUser"){
     $now = DateTime::createFromFormat('U.u', microtime(true));
     $timeStamp = $now->format("YmdHisu");
     if(isIdAvailable($studentId)){
-        $query = "INSERT INTO alumni(user_id,first_name,middle_name,last_name,email,number,birthdate,gender,address,permanent_address,course,photo) 
-    VALUES ($studentId,'$fName','$mName','$lName','$email','$contact','$birthDate','$gender','$address','$permaAddress','$course','placeholder.png')";
+        $query = "INSERT INTO alumni(user_id,first_name,middle_name,last_name,email,number,birthdate,gender,address,permanent_address,course,photo,is_graduate) 
+    VALUES ('$studentId','$fName','$mName','$lName','$email','$contact','$birthDate','$gender','$address','$permaAddress','$course','placeholder.png','false')";
     if(mysqli_query($connect,$query)) 
     {
         echo 'success';
@@ -55,10 +55,31 @@ if($requestType == "getProfile"){
     echo json_encode($arrayData);
 }
 
+if($requestType == "deleteProfile"){
+    include '../Database.php';
+    $id = getValue('user_id');
+    $sql = "delete from alumni where user_id = $id";
+    if(mysqli_query($connect,$sql)) 
+    {
+        echo 'success';
+    }else {
+        echo "Error: " . $sql . "<br>" . $connect->error;
+    }
+    $sql2 = "delete from users where user_id = $id";
+    if(mysqli_query($connect,$sql2))
+    {
+        echo 'success';
+    }else {
+        echo "Error: " . $sql . "<br>" . $connect->error;
+    }
+}
+
+
+
 if($requestType == "fetchAlumni"){
     include '../Database.php';
 
-    $sql = "select * from alumni";
+    $sql = "select * from alumni ORDER BY last_name";
     $result = $connect->query($sql);
     $arrayData = array();
     class myObject

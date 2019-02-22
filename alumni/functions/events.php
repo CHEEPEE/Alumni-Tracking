@@ -53,7 +53,6 @@ if($requestType == "approveEvent"){
     if(mysqli_query($connect,$sql))
     {
         echo 'success';
-    
     }else {
         echo "Error: " . $sql . "<br>" . $connect->error;
     }

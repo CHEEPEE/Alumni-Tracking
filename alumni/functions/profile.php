@@ -13,11 +13,9 @@ if($requestType == "getProfile"){
         // code...
         while ($row = $result->fetch_assoc()) {
         // code...
-
         $subject = new myObject();
         $subject = $row;
         $arrayData=$subject;
-        
         }
     }
     echo json_encode($arrayData);
@@ -47,8 +45,6 @@ if($requestType == "changePassword"){
       }
       }
   }
- 
-
 }
 
 
@@ -66,11 +62,15 @@ if($requestType == "updateProfile"){
     $permaAddress = getValue('permanent_address');
     $course = getValue('course');
     $birthDate = getValue('birthdate');
+    $is_graduate = getValue('is_graduate');
+    $batch = getValue("batch");
     $photoName = getValue('photoName') == ''?'placeholder.png':getValue('photoName');
     $now = DateTime::createFromFormat('U.u', microtime(true));
     $timeStamp = $now->format("YmdHisu");
-        $query = "update alumni set first_name = '$fName',middle_name = '$mName',last_name = '$lName',email = '$email',number = '$contact',birthdate = '$birthDate',gender = '$gender',address = '$address',permanent_address = '$permaAddress',course = '$course' , photo = '$photoName'
+        $query = "update alumni set first_name = '$fName',middle_name = '$mName',last_name = '$lName',email = '$email',number = '$contact',birthdate = '$birthDate',gender = '$gender',address = '$address',permanent_address = '$permaAddress',course = '$course' , photo = '$photoName', batch = '$batch',is_graduate = '$is_graduate' 
   where user_id = '$studentId'";
+    $updateUserName = "update users set username = '$email' where user_id = '$studentId'";
+    mysqli_query($connect,$updateUserName);
     if(mysqli_query($connect,$query))
     {
         echo 'success';

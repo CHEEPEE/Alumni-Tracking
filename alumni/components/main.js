@@ -3,14 +3,14 @@ class MainContainer extends React.Component {
     render() {
       return (
         <React.Fragment>
-          <div className="tab-content" id="v-pills-tabContent">
+          <div className="tab-content h-100" id="v-pills-tabContent">
             <div
-              className="tab-pane fade show active"
+              className="tab-pane h-100 fade show active"
               id="v-pills-home"
               role="tabpanel"
               aria-labelledby="v-pills-home-tab"
             >
-              ...
+              <ManageHomeContainer/>
             </div>
             <div
               className="tab-pane fade"

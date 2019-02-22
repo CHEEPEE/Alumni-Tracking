@@ -21,7 +21,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg shadow-sm navbar-light bg-light">
         <a class="navbar-brand" href="#">Tracking System</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
@@ -53,8 +53,7 @@
                    </small>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#"><small>Action</small></a>
-                    <a class="dropdown-item" href="#"><small>Action</small></a>
+                    <a class="dropdown-item" href="#"><small>Profile</small></a>
                     <div class="dropdown-divider"></div>
                     <a href = "logout.php" class="dropdown-item"><small>Signout</small></a>
                 </div>
@@ -98,8 +97,10 @@
 let user_id = '<?php echo $_SESSION['user_id'];?>'
 let upload_dir =  "http://localhost/alumni-tracking-system/Alumni%20Tracking/upload/";
 </script>
+<script src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js'></script>
 <script type="text/babel" src="../utils/utils.js"></script>
 <script type="text/babel" src="components/EventsManagement.js"></script>
+<script type="text/babel" src="components/etc.js"></script>
 <script type="text/babel" src="mainContainer.js"></script>
 
 
