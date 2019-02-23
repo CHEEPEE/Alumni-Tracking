@@ -15,14 +15,16 @@ class EventManagementContainer extends React.Component {
       whatEvent: whatEvent,
       whenEvent: whenEvent,
       whereEvent: whereEvent,
-      eventType:eventType
+      eventType: eventType
     };
 
+    let sup = this;
     ajaxHandler(event, data => {
       if (isSuccess(data)) {
         getEvents();
         clearValue(event);
         $("#exampleModalCenter").modal("hide");
+        sup.getAlumni(event);
       }
     });
   };
@@ -36,6 +38,57 @@ class EventManagementContainer extends React.Component {
     this.setState({
       tab: 0
     });
+  };
+
+  getAlumni = eventDetails => {
+    let sup = this;
+    $.ajax({
+      type: "Post",
+      url: "functions/index.php",
+      data: {
+        requestType: "fetchAlumni"
+      },
+      success: function(data) {
+        // console.log(data);
+        JSON.parse(data).map((object, index) => {
+          // <AlumniListItem
+          //   key={index}
+          //   username={
+          //     object.first_name +
+          //     " " +
+          //     object.middle_name +
+          //     " " +
+          //     object.last_name
+          //   }
+          //   email={object.email}
+          //   studentId={object.user_id}
+          //   address={object.address}
+          //   course={object.course}
+          //   photo={object.photo}
+          //   fetchUsers={sup.fetchUsers}
+          // />
+
+          sup.sendAnnouncementEmail(eventDetails, object);
+        });
+      }
+    });
+  };
+
+  sendAnnouncementEmail = (alumniDetails, EmailDetails) => {
+    let sup = this;
+    console.log({ ...EmailDetails, ...alumniDetails });
+    ajaxHandler(
+      {
+        ...EmailDetails,
+        ...alumniDetails,
+        requestType: "sendAnnouncementEmail"
+      },
+      data => {
+        console.log(data);
+        if (isSuccess(data)) {
+        }
+      }
+    );
   };
 
   componentDidMount() {}
@@ -96,7 +149,7 @@ class EventsList extends React.Component {
 }
 
 class EventRequestList extends React.Component {
-  state = {eventType:"Choose Type"};
+  state = { eventType: "Choose Type" };
   approveRequest = () => {};
   componentDidMount() {
     getEventsRequest();
@@ -149,7 +202,9 @@ const AddEventModal = props => {
                   <div className="col">
                     <div className="form-group">
                       <label for="exampleInputEmail1">
-                        <small class="form-text font-weight-bold text-muted">What Event?</small>
+                        <small class="form-text font-weight-bold text-muted">
+                          What Event?
+                        </small>
                       </label>
                       <textarea
                         type="email"
@@ -165,7 +220,9 @@ const AddEventModal = props => {
                   <div className="col">
                     <div className="form-group">
                       <label for="exampleInputEmail1">
-                        <small class="form-text font-weight-bold text-muted">Date and Time of Event?</small>
+                        <small class="form-text font-weight-bold text-muted">
+                          Date and Time of Event?
+                        </small>
                       </label>
                       <input
                         type="email"
@@ -181,7 +238,9 @@ const AddEventModal = props => {
                   <div className="col">
                     <div className="form-group">
                       <label for="exampleInputEmail1">
-                        <small class="form-text font-weight-bold text-muted">Place of Event?</small>
+                        <small class="form-text font-weight-bold text-muted">
+                          Place of Event?
+                        </small>
                       </label>
                       <input
                         type="email"
@@ -212,13 +271,16 @@ const AddEventModal = props => {
                           // this.setState({
                           //   gender: text.target.value
                           // });
-                          
                         }}
                         // defaultValue = {"Choose Advertisement Type . . ."}
                       >
                         {/* <option selected>Choose Advertisement Type . . .</option> */}
-                        <option value="Announcement/Events">Announcement/Events</option>
-                        <option value="Job Opportunities">Job Opportunities</option>
+                        <option value="Announcement/Events">
+                          Announcement/Events
+                        </option>
+                        <option value="Job Opportunities">
+                          Job Opportunities
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -249,10 +311,10 @@ const AddEventModal = props => {
 };
 
 class EventsItemList extends React.Component {
-  state = {}
-  setProfile(data,args){
+  state = {};
+  setProfile(data, args) {
     // console.log(data);
-    
+
     let profile = JSON.parse(data);
     // console.log(profile.first_name);
     args.setState({
@@ -260,11 +322,11 @@ class EventsItemList extends React.Component {
       ...profile
     });
     args.setState({
-      photo:upload_dir+profile.photo
-    })
+      photo: upload_dir + profile.photo
+    });
   }
-  getUser(){
-    let userId = this.props.item.user_id
+  getUser() {
+    let userId = this.props.item.user_id;
     // if(userId){
     //   return false
     // }
@@ -274,27 +336,37 @@ class EventsItemList extends React.Component {
       this
     );
   }
-  componentDidMount(){
-    this.getUser()
+  componentDidMount() {
+    this.getUser();
   }
   render() {
     return (
       <div className="container mt-2 w-100 border-bottom pb-2">
         <div className="row">
-          <small>from <a className = "text-primary">@{this.state.first_name}</a></small>{this.props.item.eventType==""?"":<span class="ml-2 badge badge-info"><small>{this.props.item.eventType}</small></span>}
+          <small>
+            from <a className="text-primary">@{this.state.first_name}</a>
+          </small>
+          {this.props.item.eventType == "" ? (
+            ""
+          ) : (
+            <span class="ml-2 badge badge-info">
+              <small>{this.props.item.eventType}</small>
+            </span>
+          )}
         </div>
         <div className="row mt-1">
           <h5>
-            {this.props.item.whenEvent} @ {this.props.item.whereEvent} 
+            {this.props.item.whenEvent} @ {this.props.item.whereEvent}
           </h5>
         </div>
         <div className="row">{this.props.item.whatEvent}</div>
         <div className="row mt-2 d-flex flex-row-reverse bd-highlight">
-        <button
+          <button
             type="button"
             className="btn ml-2 btn-sm btn-success "
             // onClick={() => this.props.removeEvent(this.props.item)}
-            data-toggle="modal" data-target={"#updateEventModal"+this.props.item.eventID}
+            data-toggle="modal"
+            data-target={"#updateEventModal" + this.props.item.eventID}
           >
             Update Event
           </button>
@@ -306,17 +378,20 @@ class EventsItemList extends React.Component {
             Delete Event
           </button>
         </div>
-        <UpdateEventModal event = {this.props.item} eventID={this.props.item.eventID} />
+        <UpdateEventModal
+          event={this.props.item}
+          eventID={this.props.item.eventID}
+        />
       </div>
     );
   }
 }
 
 class EventsItemListRequest extends React.Component {
-  state = {}
-  setProfile(data,args){
+  state = {};
+  setProfile(data, args) {
     console.log(data);
-    
+
     let profile = JSON.parse(data);
     console.log(profile.first_name);
     args.setState({
@@ -324,12 +399,12 @@ class EventsItemListRequest extends React.Component {
       ...profile
     });
     args.setState({
-      photo:upload_dir+profile.photo
-    })
+      photo: upload_dir + profile.photo
+    });
   }
-  
-  getUser(){
-    let userId = this.props.item.user_id
+
+  getUser() {
+    let userId = this.props.item.user_id;
     // if(userId){
     //   return false
     // }
@@ -340,15 +415,23 @@ class EventsItemListRequest extends React.Component {
     );
   }
 
-
-  componentDidMount(){
-    this.getUser()
+  componentDidMount() {
+    this.getUser();
   }
   render() {
     return (
       <div className="container mt-2 w-100 border-bottom pb-2">
         <div className="row">
-        <small>from <a className = "text-primary">@{this.state.first_name}</a></small>{this.props.item.eventType==""?"":<span class="ml-2 badge badge-info"><small>{this.props.item.eventType}</small></span>}
+          <small>
+            from <a className="text-primary">@{this.state.first_name}</a>
+          </small>
+          {this.props.item.eventType == "" ? (
+            ""
+          ) : (
+            <span class="ml-2 badge badge-info">
+              <small>{this.props.item.eventType}</small>
+            </span>
+          )}
         </div>
         <div className="row ">
           <h5>
@@ -371,8 +454,8 @@ class EventsItemListRequest extends React.Component {
               type="button"
               className="btn btn-sm btn-success"
               onClick={() => {
-                if(confirm("Approve Event/Announcement?")){
-                  approveAdsRequest(this.props.item.eventID)
+                if (confirm("Approve Event/Announcement?")) {
+                  approveAdsRequest(this.props.item.eventID);
                 }
               }}
             >
@@ -380,7 +463,6 @@ class EventsItemListRequest extends React.Component {
             </button>
           </div>
         </div>
-                
       </div>
     );
   }
@@ -395,9 +477,9 @@ function getEventsRequest() {
 }
 function deleteEvent(data) {
   if (confirm("Delete Event?")) {
-    ajaxHandler({ requestType: "deleteEvent", id: data.eventID }, ()=>{
-      getEvents()
-      getEventsRequest()
+    ajaxHandler({ requestType: "deleteEvent", id: data.eventID }, () => {
+      getEvents();
+      getEventsRequest();
     });
   }
 }
@@ -419,8 +501,11 @@ function renderEvents(data) {
     document.getElementById("eventsContainer")
   );
 }
-function approveAdsRequest(eventId){
-  ajaxHandler({requestType:'approveEvent',eventId:eventId,status:"approved"},getEventsRequest)
+function approveAdsRequest(eventId) {
+  ajaxHandler(
+    { requestType: "approveEvent", eventId: eventId, status: "approved" },
+    getEventsRequest
+  );
 }
 function renderEventsRequest(data) {
   console.log(data);
@@ -442,23 +527,26 @@ function renderEventsRequest(data) {
 
 class UpdateEventModal extends React.Component {
   state = {
-    whatEvent:this.props.event.whatEvent,
-    whenEvent:this.props.event.whenEvent,
-    whereEvent:this.props.event.whereEvent,
-    eventType:this.props.event.eventType
+    whatEvent: this.props.event.whatEvent,
+    whenEvent: this.props.event.whenEvent,
+    whereEvent: this.props.event.whereEvent,
+    eventType: this.props.event.eventType
   };
 
-  updateEvent=()=>{
-    console.log("test")
-    let eventID = this.props.event.eventID
-    let event = {requestType:"updateEvent",eventID:eventID,...this.state}
-    ajaxHandler({...event},(data)=>{
-      console.log(data)
-      getEvents()
-      $("#updateEventModal"+this.props.eventID).modal("hide")
-    },this)
-  
-  }
+  updateEvent = () => {
+    console.log("test");
+    let eventID = this.props.event.eventID;
+    let event = { requestType: "updateEvent", eventID: eventID, ...this.state };
+    ajaxHandler(
+      { ...event },
+      data => {
+        console.log(data);
+        getEvents();
+        $("#updateEventModal" + this.props.eventID).modal("hide");
+      },
+      this
+    );
+  };
   render() {
     return (
       <div
@@ -495,14 +583,14 @@ class UpdateEventModal extends React.Component {
                         </label>
                         <textarea
                           type="email"
-                          defaultValue = {this.state.whatEvent}
+                          defaultValue={this.state.whatEvent}
                           className="form-control form-control-sm"
-                          onChange = {text=>{
+                          onChange={text => {
                             this.setState({
-                              whatEvent:text.target.value
-                            })
+                              whatEvent: text.target.value
+                            });
                           }}
-                          id={"whatEvent"+this.props.eventID}
+                          id={"whatEvent" + this.props.eventID}
                           aria-describedby="emailHelp"
                           placeholder={"What Event?"}
                         />
@@ -517,13 +605,13 @@ class UpdateEventModal extends React.Component {
                         </label>
                         <input
                           type="email"
-                          defaultValue = {this.state.whenEvent}
+                          defaultValue={this.state.whenEvent}
                           className="form-control form-control-sm"
-                          id={"whenEvent"+this.props.eventID}
-                          onChange = {text=>{
+                          id={"whenEvent" + this.props.eventID}
+                          onChange={text => {
                             this.setState({
-                              whenEvent:text.target.value
-                            })
+                              whenEvent: text.target.value
+                            });
                           }}
                           aria-describedby="emailHelp"
                           placeholder={"When Event?"}
@@ -539,13 +627,13 @@ class UpdateEventModal extends React.Component {
                         </label>
                         <input
                           type="email"
-                          defaultValue = {this.state.whereEvent}
+                          defaultValue={this.state.whereEvent}
                           className="form-control form-control-sm"
-                          id={"whereEvent"+this.props.eventID}
-                          onChange = {text=>{
+                          id={"whereEvent" + this.props.eventID}
+                          onChange={text => {
                             this.setState({
-                              whereEvent:text.target.value
-                            })
+                              whereEvent: text.target.value
+                            });
                           }}
                           aria-describedby="emailHelp"
                           placeholder={"Where Event?"}
@@ -560,7 +648,7 @@ class UpdateEventModal extends React.Component {
                           Announcement Type
                         </small>
                         <select
-                          id={"eventType"+this.props.eventID}
+                          id={"eventType" + this.props.eventID}
                           className="form-control form-control-sm"
                           onChange={text => {
                             $("#eventType").on("change", function() {
@@ -573,7 +661,7 @@ class UpdateEventModal extends React.Component {
                               eventType: text.target.value
                             });
                           }}
-                          defaultValue = {this.state.eventType}
+                          defaultValue={this.state.eventType}
                         >
                           {/* <option selected>Choose Advertisement Type . . .</option> */}
                           <option value="Announcement/Events">

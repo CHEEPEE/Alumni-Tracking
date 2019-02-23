@@ -21,8 +21,8 @@ if($requestType == "addUser"){
     if(mysqli_query($connect,$query)) 
     {
         echo 'success';
-        insertIntoUsers($email,$timeStamp,$studentId);
-    
+        insertIntoUsers($email,$timeStamp,$studentId,$fName.' '.$mName.' '.$lName);
+     
     }else {
         echo "Error: " . $query . "<br>" . $connect->error;
     }
@@ -58,14 +58,14 @@ if($requestType == "getProfile"){
 if($requestType == "deleteProfile"){
     include '../Database.php';
     $id = getValue('user_id');
-    $sql = "delete from alumni where user_id = $id";
+    $sql = "delete from alumni where user_id = '$id'";
     if(mysqli_query($connect,$sql)) 
     {
         echo 'success';
     }else {
         echo "Error: " . $sql . "<br>" . $connect->error;
     }
-    $sql2 = "delete from users where user_id = $id";
+    $sql2 = "delete from users where user_id = '$id'";
     if(mysqli_query($connect,$sql2))
     {
         echo 'success';
@@ -103,16 +103,62 @@ if($requestType == "fetchAlumni"){
     echo json_encode($arrayData);
 }
 
-function insertIntoUsers($username,$password,$user_id){
+function insertIntoUsers($username,$password,$user_id,$studentName){
     include '../Database.php';
     $query = "INSERT INTO users(user_id,username,password,user_type) 
     VALUES ('$user_id','$username','$password','student')";
     if(mysqli_query($connect,$query)) 
     {
         // echo 'success';
+        sendPasswordMail($password,$username,$user_id);
     }else {
         echo "Error: " . $query . "<br>" . $connect->error;
     }
+}
+
+
+function sendPasswordMail($password,$email,$studentName){
+    $to =$email;
+   
+    $subject = "Account Creation Notice";
+
+    $message = "
+    <html>
+    <head>
+    <title>University of Antique Password Automatic Email Sender</title>
+    </head>
+    <body>
+    <p>Dear $studentName,
+
+    Account Created under $studentName have the following password: $password<br>
+    <br>
+   
+    Please don't share this information to others. Thank you.
+    </p>
+
+    <br>
+    <p>Details:
+    email: $email
+    password: $password
+    </p>
+    </body>
+    </html>
+    ";
+
+    // Always set content-type when sending HTML email
+    $headers = "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+    // More headers
+    $headers .= 'From: <UA-Alumni-tracking-System>' . "\r\n";
+    $headers .= "Cc: $to" . "\r\n";
+
+    if(mail($to,$subject,$message,$headers)){
+        echo "sent Success";
+    }else{
+        echo "failed";
+    }
+    // echo mail($to,$subject,$message,$headers);
 }
 
 ?>

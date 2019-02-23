@@ -282,7 +282,7 @@ class UserManagementContainer extends React.Component {
               address={object.address}
               course={object.course}
               photo={object.photo}
-              fetchUsers = {sup.fetchUsers}
+              fetchUsers={sup.fetchUsers}
             />
           );
         });
@@ -503,7 +503,7 @@ class AddUserModal extends React.Component {
         },
         success: function(data) {
           console.log(data);
-          if (data.trim() == "success") {
+          if (data.includes("success")) {
             sup.clearValue();
             $("#addUserModal").modal("hide");
             sup.props.fetchUsers();
