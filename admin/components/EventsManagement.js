@@ -51,23 +51,6 @@ class EventManagementContainer extends React.Component {
       success: function(data) {
         // console.log(data);
         JSON.parse(data).map((object, index) => {
-          // <AlumniListItem
-          //   key={index}
-          //   username={
-          //     object.first_name +
-          //     " " +
-          //     object.middle_name +
-          //     " " +
-          //     object.last_name
-          //   }
-          //   email={object.email}
-          //   studentId={object.user_id}
-          //   address={object.address}
-          //   course={object.course}
-          //   photo={object.photo}
-          //   fetchUsers={sup.fetchUsers}
-          // />
-
           sup.sendAnnouncementEmail(eventDetails, object);
         });
       }
@@ -505,6 +488,42 @@ function approveAdsRequest(eventId) {
   ajaxHandler(
     { requestType: "approveEvent", eventId: eventId, status: "approved" },
     getEventsRequest
+  );
+
+  ajaxHandler({ requestType: "getEvent", eventId: eventId }, eventDataObj => {
+    console.log(eventDataObj);
+    
+    JSON.parse(eventDataObj).map((eventDetails) => {
+      $.ajax({
+        type: "Post",
+        url: "functions/index.php",
+        data: {
+          requestType: "fetchAlumni"
+        },
+        success: function(data) {
+          // console.log(data);
+          JSON.parse(data).map((object, index) => {
+            sendApprovedRequestToAlumni(eventDetails, object);
+          });
+        }
+      });
+    });
+  });
+}
+
+function sendApprovedRequestToAlumni(eventDetails, userDetails) {
+  console.log({ ...eventDetails, ...userDetails });
+  ajaxHandler(
+    {
+      ...eventDetails,
+      ...userDetails,
+      requestType: "sendAnnouncementEmail"
+    },
+    data => {
+      console.log(data);
+      if (isSuccess(data)) {
+      }
+    }
   );
 }
 function renderEventsRequest(data) {

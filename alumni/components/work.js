@@ -95,12 +95,14 @@ class UpdateWork extends React.Component {
     // let jobProf = new JObProfiles();
     return (
       <React.Fragment>
-        <div
-          className="row pt-3"
-        >
+        <div className="row pt-3">
           <div className="col">
-            <button type="button" data-toggle="modal"
-            data-target="#addJobDesModal" className="btn btn-primary btn-sm">
+            <button
+              type="button"
+              data-toggle="modal"
+              data-target="#addJobDesModal"
+              className="btn btn-primary btn-sm"
+            >
               Add Job
             </button>
           </div>
@@ -108,34 +110,35 @@ class UpdateWork extends React.Component {
         <div className="row pt-3">
           <div className="col">
             <h5 className="text-muted">Current Job</h5>
-            {this.state.currentJobProfile.job_title ==null ?"":
-            <div className={"row"} >
-            <div className="col">
-              <div class={"alert alert-primary"} role="alert">
-                <h4 class="alert-heading">
-                  {this.state.currentJobProfile.job_title}
-                </h4>
-                <p>
-                  <span class="badge badge-primary p-2">
-                    Salary: {this.state.job_salary}
-                  </span>
-                </p>
-                <hr />
-                <div className="row">
-                  <div className="col-auto">
-                    <small>Job Started</small>
-                  </div>
-                  <div className="col">
-                    <span class="badge badge-success p-2">
-                      {this.state.job_start}
-                    </span>
+            {this.state.currentJobProfile.job_title == null ? (
+              ""
+            ) : (
+              <div className={"row"}>
+                <div className="col">
+                  <div class={"alert alert-primary"} role="alert">
+                    <h4 class="alert-heading">
+                      {this.state.currentJobProfile.job_title}
+                    </h4>
+                    <p>
+                      <span class="badge badge-primary p-2">
+                        Salary: {this.state.job_salary}
+                      </span>
+                    </p>
+                    <hr />
+                    <div className="row">
+                      <div className="col-auto">
+                        <small>Job Started</small>
+                      </div>
+                      <div className="col">
+                        <span class="badge badge-success p-2">
+                          {this.state.job_start}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          }
-          
+            )}
           </div>
 
           <div className="col">
@@ -184,7 +187,7 @@ class JobHistoryItem extends React.Component {
   render() {
     return (
       <div className="row">
-        <div class={"alert alert-light border border-muted w-75 "}role="alert">
+        <div class={"alert alert-light border border-muted w-75 "} role="alert">
           <h4 class="alert-heading">{this.props.object.job_title}</h4>
           <p>
             <span class="badge badge-muted p-2">
@@ -225,7 +228,6 @@ class AddJobModal extends React.Component {
       data => {
         console.log(data);
         if (data.trim() == "success") {
-         
           alert("Profile Updated");
           $("#addJobDesModal").modal("hide");
           this.props.fetchJob();
@@ -327,7 +329,9 @@ class AddJobModal extends React.Component {
                       }}
                       class="form-control"
                     >
-                      <option value="s1">Less than 10K</option>
+                      <option value="s1" selected>
+                        Less than 10K
+                      </option>
                       <option value="s2">10K- 15K</option>
                       <option value="s3">16K - 20K</option>
                       <option value="s4">21K - 30K</option>

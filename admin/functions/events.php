@@ -160,7 +160,28 @@ if($requestType == "approveEvent"){
     }
 }
 
+if($requestType == "getEvent"){
+    include '../Database.php';
+    $eventID = getValue('eventId');
+    $sql = "select * from event where eventID = $eventID ";
+    $result = $connect->query($sql);
+    $arrayData = array();
+    class myObject
+    {
+        public $property1;
+    }
+    if ($result->num_rows >0) {
+        // code...
+        while ($row = $result->fetch_assoc()) {
+        // code...
 
+        $subject = new myObject();
+        $subject = $row;
+        $arrayData[]=$subject;
+        }
+    }
+    echo json_encode($arrayData);
+}
 if($requestType == "deleteEvent"){
     include '../Database.php';
     $id = intval(getValue('id'));
