@@ -61,8 +61,8 @@
                    </small>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#"><small>Action</small></a>
-                    <a class="dropdown-item" href="#"><small>Action</small></a>
+                    <!-- <a class="dropdown-item" href="#"><small>Action</small></a>
+                    <a class="dropdown-item" href="#"><small>Action</small></a> -->
                     <div class="dropdown-divider"></div>
                     <a href = "logout.php" class="dropdown-item" href="#"><small>Signout</small></a>
                 </div>
@@ -91,10 +91,10 @@
                         aria-selected="false"><i class="material-icons align-middle mr-2">
                             event
                         </i><small> Advertisement</small></a>
-                    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings"
+                    <!-- <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings"
                         aria-selected="false"><i class="material-icons align-middle mr-2">
                             info
-                        </i><small> About UA-CCS</small></a>
+                        </i><small> About UA-CCS</small></a> -->
                 </div>
             </div>
             <div class="col-10 zero" id="mainContainer">

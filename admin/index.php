@@ -53,7 +53,7 @@
                    </small>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#"><small>Profile</small></a>
+                    <!-- <a class="dropdown-item" href="#"><small>Profile</small></a> -->
                     <div class="dropdown-divider"></div>
                     <a href = "logout.php" class="dropdown-item"><small>Signout</small></a>
                 </div>
@@ -83,8 +83,8 @@
                     aria-selected="false"><i class="material-icons align-middle mr-2">
                         event
                     </i><small>Events</small></a>
-                <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings"
-                    aria-selected="false"><small>Menu menu</small></a>
+                <!-- <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings"
+                    aria-selected="false"><small>Menu menu</small></a> -->
             </div>
         </div>
         <div class="col-10" id="mainContainer">
