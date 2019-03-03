@@ -134,6 +134,16 @@ class UpdateWork extends React.Component {
                           {this.state.job_start}
                         </span>
                       </div>
+                      <div className="col  d-flex justify-content-end">
+                        <button
+                          type="button"
+                          // data-toggle="modal"
+                          // data-target="#addBusiness"
+                          className="btn btn-warning btn-sm "
+                        >
+                          Edit
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -203,6 +213,16 @@ class JobHistoryItem extends React.Component {
               <span class="badge badge-success p-2">
                 {this.state.job_start}
               </span>
+            </div>
+            <div className="col  d-flex justify-content-end">
+              <button
+                type="button"
+                // data-toggle="modal"
+                // data-target="#addBusiness"
+                className="btn btn-warning btn-sm "
+              >
+                Edit
+              </button>
             </div>
           </div>
         </div>

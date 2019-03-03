@@ -255,7 +255,57 @@ class DashboardContainer extends React.Component {
 }
 
 class UserManagementContainer extends React.Component {
-  state = {};
+  state = { currentJob: { job_title: undefined, job_salary: "" } };
+  viewAlumniProfile = userProfile => {
+    $("#viewAlumniModal").modal("toggle");
+    this.setState({ ...userProfile });
+    console.log(this.state);
+    this.getUserCurrentWork(userProfile.studentId);
+    this.getUserJobHistory(userProfile.studentId);
+    this.getBusiness(userProfile.studentId);
+  };
+  getUserCurrentWork(userId) {
+    let sup = this;
+    ajaxHandler({ requestType: "fetchCurrentJob", user_id: userId }, data => {
+      JSON.parse(data).map(function(object, index) {
+        sup.setState({
+          currentJob: {
+            ...object,
+            job_salary: sup.getSalary(object.job_salary)
+          }
+        });
+      });
+      console.log(this.state.currentJob);
+    });
+  }
+
+  getBusiness = userId => {
+    let sup = this;
+    ajaxHandler({ requestType: "getBusinesses", user_id: userId }, data => {
+      let listItem = JSON.parse(data).map((object, index) => (
+        <BusinessesItem
+          business={{
+            ...object
+          }}
+        />
+      ));
+      ReactDOM.render(listItem, document.querySelector("#businessesContainer"));
+    });
+  };
+  getUserJobHistory(userId) {
+    let sup = this;
+    ajaxHandler({ requestType: "fetchJobHistory", user_id: userId }, data => {
+      let listItem = JSON.parse(data).map((object, index) => (
+        <JobHistoryItem
+          currentJob={{
+            ...object,
+            job_salary: sup.getSalary(object.job_salary)
+          }}
+        />
+      ));
+      ReactDOM.render(listItem, document.querySelector("#jobHistoryContainer"));
+    });
+  }
   fetchUsers() {
     let sup = this;
     $.ajax({
@@ -283,6 +333,7 @@ class UserManagementContainer extends React.Component {
               course={object.course}
               photo={object.photo}
               fetchUsers={sup.fetchUsers}
+              viewProfile={sup.viewAlumniProfile}
             />
           );
         });
@@ -294,6 +345,27 @@ class UserManagementContainer extends React.Component {
       }
     });
   }
+
+  getSalary = (job_salary = "s0") => {
+    // let job_salary = this.context.job_salary;
+    let salary = [
+      "Les than 10,000",
+      "10,000 - 15,000",
+      "16,000 - 20,000",
+      "21,000 - 30,000",
+      "30,000 - 50,000",
+      "50,000 - 80,000",
+      "80,000 - 100,000",
+      "100,000 - 150, 000",
+      "150,000 - 200,000",
+      "200,000 - 500,000",
+      "Greater than 500,000"
+    ];
+    let extractNumber = job_salary.replace("s", "");
+    return salary[parseInt(extractNumber)];
+
+    // return salary[1]
+  };
   componentDidMount() {
     this.fetchUsers();
   }
@@ -358,14 +430,250 @@ class UserManagementContainer extends React.Component {
           <div className="col-1 font-weight-bold">
             <small />
           </div>
+          <div className="col-1 font-weight-bold">
+            <small />
+          </div>
         </div>
         <div className="w-100" id="studentListContainer" />
+
         <AddUserModal fetchUsers={this.fetchUsers} />
+        <div
+          className="modal fade"
+          id="viewAlumniModal"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalCenterTitle"
+          aria-hidden="true"
+        >
+          <div
+            className="modal-dialog modal-lg modal-dialog-centered"
+            role="document"
+          >
+            <div className="modal-content ">
+              <div className="modal-body">
+                <div className="card-body">
+                  <div className="row pl-3">
+                    <div className="col">
+                      <h3>{this.state.username}</h3>
+                    </div>
+                  </div>
+
+                  <nav className="row w-100">
+                    <div class="nav nav-tabs w-100" id="nav-tab" role="tablist">
+                      <a
+                        class="nav-item nav-link active"
+                        id="nav-home-tab"
+                        data-toggle="tab"
+                        href="#nav-home"
+                        role="tab"
+                        aria-controls="nav-home"
+                        aria-selected="true"
+                      >
+                        Profile
+                      </a>
+                      <a
+                        class="nav-item nav-link"
+                        id="nav-profile-tab"
+                        data-toggle="tab"
+                        href="#nav-profile"
+                        role="tab"
+                        aria-controls="nav-profile"
+                        aria-selected="false"
+                      >
+                        Job
+                      </a>
+                      <a
+                        class="nav-item nav-link"
+                        id="nav-contact-tab"
+                        data-toggle="tab"
+                        href="#nav-contact"
+                        role="tab"
+                        aria-controls="nav-contact"
+                        aria-selected="false"
+                      >
+                        Business
+                      </a>
+                    </div>
+                  </nav>
+                  <div class="tab-content" id="nav-tabContent">
+                    <div
+                      class="tab-pane fade show active"
+                      id="nav-home"
+                      role="tabpanel"
+                      aria-labelledby="nav-home-tab"
+                    >
+                      <div className="row mt-3">
+                        <div className="col">
+                          <div className="row">
+                            <small>Name</small>
+                          </div>
+                          <div className="row">
+                            <div className="col">
+                              <div className="row font-weight-bold">
+                                {this.state.username}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row mt-1">
+                        <div className="col">
+                          <div className="row">
+                            <small>Student Number</small>
+                          </div>
+                          <div className="row">
+                            <div className="col">
+                              <div className="row font-weight-bold">
+                                {this.state.studentId}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row mt-1">
+                        <div className="col">
+                          <div className="row">
+                            <small>Email</small>
+                          </div>
+                          <div className="row">
+                            <div className="col">
+                              <div className="row font-weight-bold">
+                                {this.state.email}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row mt-1">
+                        <div className="col">
+                          <div className="row">
+                            <small>Course</small>
+                          </div>
+                          <div className="row">
+                            <div className="col">
+                              <div className="row font-weight-bold">
+                                {this.state.course}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row mt-1">
+                        <div className="col">
+                          <div className="row">
+                            <small>Address</small>
+                          </div>
+                          <div className="row">
+                            <div className="col">
+                              <div className="row font-weight-bold">
+                                {this.state.address}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="tab-pane fade"
+                      id="nav-profile"
+                      role="tabpanel"
+                      aria-labelledby="nav-profile-tab"
+                    >
+                      <div className="row mt-2">
+                        <div className="col">
+                          <div className="row mt-1 mb-2">
+                            <div className="col font-weight-bold">
+                              Work Title
+                            </div>
+                            <div className="col font-weight-bold">
+                              Salary Range
+                            </div>
+                            {/* <div className="col font-weight-bold">
+                              Job Title
+                            </div> */}
+                            <div className="col font-weight-bold">
+                              Start Date
+                            </div>
+                            {/* <div className="col font-weight-bold">End Date</div> */}
+                          </div>
+                          <small className="font-weight-bold text-primary">
+                            Current Job
+                          </small>
+                          <div className="row mb-3">
+                            <div className="col">
+                              {this.state.currentJob.job_title}
+                            </div>
+                            <div className="col ">
+                              {this.state.currentJob.job_salary}
+                            </div>
+                            {/* <div className="col ">
+                              {this.state.currentJob.job_title}
+                            </div> */}
+                            <div className="col">
+                              {this.state.currentJob.job_start}
+                            </div>
+                          </div>
+                          <small className="font-weight-bold text-primary pt-3">
+                            Job History
+                          </small>
+                          <div className="mb-3" id="jobHistoryContainer" />
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="tab-pane fade"
+                      id="nav-contact"
+                      role="tabpanel"
+                      aria-labelledby="nav-contact-tab"
+                    >
+                      <div className="mt-3" id="businessesContainer" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </React.Fragment>
     );
   }
 }
 
+const JobHistoryItem = props => (
+  <div className="row">
+    <div className="col">{props.currentJob.job_title}</div>
+    <div className="col ">{props.currentJob.job_salary}</div>
+    {/* <div className="col ">{props.currentJob.job}</div> */}
+    <div className="col">{props.currentJob.job_start}</div>
+  </div>
+);
+
+const BusinessesItem = props => (
+  <div className="row">
+    <div className="col">
+      <div className="row">
+        <small>Business Name</small>
+      </div>
+      <div className="row">{props.business.business_name}</div>
+    </div>
+    <div className="col">
+      <div className="row">
+        <small>Business Category</small>
+      </div>
+      <div className="row">
+        <div className="row">{props.business.categoryName}</div>
+      </div>
+    </div>
+    <div className="col">
+      <div className="row">
+        <small>Business Started</small>
+      </div>
+      <div className="row">
+        <div className="row">{props.business.business_start}</div>
+      </div>
+    </div>
+  </div>
+);
 class User {
   constructor(
     fName,
@@ -642,6 +950,17 @@ class AlumniListItem extends React.Component {
           </div>
           <div className="col-1 font-weight-light text-truncate">
             <small>{this.props.course}</small>
+          </div>
+          <div className="col-1">
+            <button
+              type="button"
+              onClick={() => {
+                this.props.viewProfile(this.props);
+              }}
+              className="btn btn-success"
+            >
+              View
+            </button>
           </div>
           <div className="col-1">
             <button

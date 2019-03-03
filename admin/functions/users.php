@@ -117,7 +117,33 @@ function insertIntoUsers($username,$password,$user_id,$studentName){
 }
 
 
-function sendPasswordMail($password,$email,$studentName){
+function sendPasswordMail($password,$emailAddress,$studentName){
+    // require './mailer/PHPMailer.php';
+    // require './mailer/SMTP.php';
+    // require './mailer/Exception.php';
+    // require './SendGrid/loader.php';
+    
+    // $email = new \SendGrid\Mail\Mail(); 
+    // $email->setFrom("kennethjiepadasas@gmail.com", "Example User");
+    // $email->setSubject("Sending with SendGrid is Fun");
+    // $email->addTo($emailAddress, "Example User");
+    // $email->addContent("text/plain", "and easy to do anywhere, even with PHP");
+    // $email->addContent(
+    //     "text/html", "<strong>and easy to do anywhere, even with PHP</strong>"
+    // );
+    // $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+    // try {
+    //     $response = $sendgrid->send($email);
+    //     print $response->statusCode() . "\n";
+    //     print_r($response->headers());
+    //     print $response->body() . "\n";
+    // } catch (Exception $e) {
+    //     echo 'Caught exception: '. $e->getMessage() ."\n";
+    // }
+    
+    
+    
+    
     $to =$email;
    
     $subject = "Account Creation Notice";
@@ -158,7 +184,145 @@ function sendPasswordMail($password,$email,$studentName){
     }else{
         echo "failed";
     }
+
+
+
+
     // echo mail($to,$subject,$message,$headers);
+
+//     $mail = new PHPMailer(true);
+// // Set PHPMailer to use the sendmail transport
+// $mail->isSendmail(true);
+// //Set who the message is to be sent from
+// $mail->setFrom('ellemich030@gmail.com', '');
+// //Set an alternative reply-to address
+// $mail->addReplyTo('kellemich030@gmail.com', '');
+// //Set who the message is to be sent to
+// $mail->addAddress($email, '');
+// //Set the subject line
+// $mail->Subject = 'PHPMailer sendmail';
+// //Read an HTML message body from an external file, convert referenced images to embedded,
+// //convert HTML into a basic plain-text alternative body
+// $mail->msgHTML($message);
+// //Replace the plain text body with one created manually
+// $mail->AltBody = 'This is a plain-text message body';
+// //Attach an image file
+// // $mail->addAttachment('images/phpmailer_mini.png');
+// //send the message, check for errors
+// if (!$mail->send()) {
+//     echo "Mailer Error: " . $mail->ErrorInfo;
+// } else {
+//     echo "Message sent!";
+// }
+}
+
+if($requestType == "fetchCurrentJob"){
+    include '../Database.php';
+    $user_id = getValue("user_id");
+    $sql = "select * from job_profiles where user_id = '$user_id' and current_work = 'true' ORDER BY job_id DESC LIMIT 1";
+    $result = $connect->query($sql);
+    $arrayData = array();
+    class myObject
+    {
+        public $property1;
+    }
+    if ($result->num_rows >0) {
+        // code...
+        while ($row = $result->fetch_assoc()) {
+        // code...
+
+        $subject = new myObject();
+        $subject = $row;
+        $arrayData[]=$subject;
+        notCurrentJob($row['user_id'],$row['job_id']);
+        }
+    }
+    echo json_encode($arrayData);
+}
+
+if($requestType == "fetchJobHistory"){
+    include '../Database.php';
+   
+    $user_id = getValue("user_id");
+    $sql = "select * from job_profiles where user_id = '$user_id' and current_work = 'false' order by job_id DESC";
+    $result = $connect->query($sql);
+    $arrayData = array();
+    class myObject
+    {
+        public $property1;
+    }
+    if ($result->num_rows >0) {
+        // code...
+        while ($row = $result->fetch_assoc()) {
+        // code...
+
+        $subject = new myObject();
+        $subject = $row;
+        $arrayData[]=$subject;
+        
+        }
+    }
+    echo json_encode($arrayData);
+}
+
+function getJobName($jobId){
+
+}
+
+function notCurrentJob($user_id,$job_id){
+    include '../Database.php';
+    $sql = "update job_profiles set current_work = 'false' where job_id != '$job_id' and user_id = '$user_id'";
+    if(mysqli_query($connect,$sql))
+    {
+        // echo 'success';
+    }else {
+        // echo "Error: " . $sql . "<br>" . $connect->error;
+    }
+}
+
+if($requestType == "getBusinesses"){
+    include '../Database.php';
+    
+    $user_id = getValue("user_id");
+
+    $sql = "select * from business_profiles where user_id = '$user_id'";
+    $result = $connect->query($sql);
+    $arrayData = array();
+    class myObject
+    {
+        public $property1;
+    }
+    if ($result->num_rows >0) {
+        // code...
+        while ($row = $result->fetch_assoc()) {
+        // code...
+
+        $subject = new myObject();
+        $subject -> business_name = $row['business_name'];
+        $subject -> business_start = $row['business_start'];
+        $subject -> categoryName = getBusinessCategoryName($row['business_category_id']);
+        $arrayData[]=$subject;
+        }
+    }
+    echo json_encode($arrayData);
+
+}
+
+function getBusinessCategoryName($categoryId){
+    include '../Database.php';
+    
+
+    $sql = "select * from business_categories where business_category_id = '$categoryId'";
+    $result = $connect->query($sql);
+    
+    if ($result->num_rows >0) {
+        // code...
+        while ($row = $result->fetch_assoc()) {
+        // code...
+        return $row['business_category_name'];
+        }
+     
+    }
 }
 
 ?>

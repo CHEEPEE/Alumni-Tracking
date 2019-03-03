@@ -120,7 +120,7 @@ class UpdateProfile extends React.Component {
     photo: "../assets/images/placeholder.png",
     photoName: "",
     batch: "",
-    is_graduate:"false"
+    is_graduate: "false"
   };
 
   getProfile(data, args) {
@@ -550,7 +550,7 @@ class UpdateProfile extends React.Component {
                   <small class="form-text font-weight-bold font-weight-bold text-muted">
                     Batch
                   </small>
-               
+
                   <input
                     type="text"
                     onChange={e => {
@@ -593,28 +593,28 @@ class UpdateSecurity extends React.Component {
   };
 
   updatePassword = () => {
-    ajaxHandler(
-      {
-        requestType: "changePassword",
-        oldPassword: this.state.oldPassword,
-        newPassword: this.state.newPassword
-      },
-      data => {
-        console.log(data);
-        if (data.trim() == "success") {
-          this.setState({
-            success: "Updated Successfully"
-          });
-          document.querySelector("#newPassword").value = "";
-          document.querySelector("#confrimPassword").value = "";
-          document.querySelector("#oldPassword").value = "";
-        } else {
-          this.setState({
-            alert: data
-          });
+    if (this.state.alert === "") {
+      ajaxHandler(
+        {
+          requestType: "changePassword",
+          oldPassword: this.state.oldPassword,
+          newPassword: this.state.newPassword
+        },
+        data => {
+          console.log(data);
+          if (data.trim() == "success") {
+            this.setState({
+              success: "Updated Successfully"
+            });
+            document.querySelector("#newPassword").value = "";
+            document.querySelector("#confrimPassword").value = "";
+            document.querySelector("#oldPassword").value = "";
+          } else {
+            alert(data);
+          }
         }
-      }
-    );
+      );
+    }
   };
 
   confirmPassword() {

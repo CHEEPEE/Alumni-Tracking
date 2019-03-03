@@ -6,7 +6,6 @@ class UpdateBusiness extends React.Component {
         return (
           <BusinessItem
             businessName={object.business_name}
-
             businessCat={object.categoryName}
             businessStart={object.business_start}
           />
@@ -74,6 +73,17 @@ class BusinessItem extends React.Component {
               <span class="badge badge-success p-2">
                 {this.props.businessStart}
               </span>
+            </div>
+            <div className="col d-flex justify-content-end">
+              <button
+                type="button"
+                
+                // data-toggle="modal"
+                // data-target="#addBusiness"
+                className="btn btn-warning btn-sm "
+              >
+                Edit
+              </button>
             </div>
           </div>
         </div>

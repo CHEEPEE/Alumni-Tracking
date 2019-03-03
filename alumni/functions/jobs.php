@@ -48,6 +48,10 @@ if($requestType == "addJobDes"){
     }
 }
 
+if($requestType == "updateJobDes"){
+    
+}
+
 if($requestType == "fetchCurrentJob"){
     include '../Database.php';
     session_start();
