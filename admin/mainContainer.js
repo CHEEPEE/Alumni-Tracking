@@ -722,7 +722,8 @@ class AddUserModal extends React.Component {
     lbirthDate: "Birth Date",
     alert: "d-none",
     alertMessage: "",
-    lStudentId: "Student ID"
+    lStudentId: "Student ID",
+    showPassword: false
   };
   validateFieds(fields) {
     for (let i in fields) {
@@ -734,6 +735,7 @@ class AddUserModal extends React.Component {
   }
   clearValue() {
     document.querySelector("#email").value = "";
+    document.querySelector("#password").value = "";
     document.querySelector("#studentId").value = "";
     // document.querySelector("#fName").value = "";
     // document.querySelector("#mName").value = "";
@@ -807,7 +809,8 @@ class AddUserModal extends React.Component {
           permaAddress: permaAddress,
           course: course,
           birthDate: birthDate,
-          requestType: "addUser"
+          requestType: "addUser",
+          password: document.querySelector("#password").value
         },
         success: function(data) {
           console.log(data);
@@ -893,6 +896,39 @@ class AddUserModal extends React.Component {
                         required
                       />
                     </div>
+                    <div className="form-group">
+                      <label for="exampleInputEmail1">Password</label>
+                      <input
+                        type={this.state.showPassword ? "text" : "password"}
+                        id="password"
+                        className="form-control form-control-sm"
+                        onChange={text => {
+                          this.setState({
+                            password: text.target.value
+                          });
+                        }}
+                        defaultValue={this.state.email}
+                        aria-describedby="emailHelp"
+                        placeholder="Enter Password"
+                        required
+                      />
+                    </div>
+                    <div class="form-group form-check">
+                      <input
+                        type="checkbox"
+                        onChange={text => {
+                          this.setState({
+                            showPassword: !this.state.showPassword
+                          });
+                        }}
+                        class="form-check-input"
+                        id="exampleCheck1"
+                      />
+                      <label class="form-check-label" for="exampleCheck1">
+                        show password
+                      </label>
+                    </div>
+
                     {/* {this.state.alert.trim().length==0?"":errorHandler(this.state.alert)} */}
                     <button type="submit" className="btn btn-sm btn-primary">
                       Register

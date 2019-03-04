@@ -15,13 +15,14 @@ if($requestType == "addUser"){
     $birthDate = getValue('birthDate');
     $now = DateTime::createFromFormat('U.u', microtime(true));
     $timeStamp = $now->format("YmdHisu");
+    $password = getValue('password');
     if(isIdAvailable($studentId)){
         $query = "INSERT INTO alumni(user_id,first_name,middle_name,last_name,email,number,birthdate,gender,address,permanent_address,course,photo,is_graduate) 
     VALUES ('$studentId','$fName','$mName','$lName','$email','$contact','$birthDate','$gender','$address','$permaAddress','$course','placeholder.png','false')";
     if(mysqli_query($connect,$query)) 
     {
         echo 'success';
-        insertIntoUsers($email,$timeStamp,$studentId,$fName.' '.$mName.' '.$lName);
+        insertIntoUsers($email,$password,$studentId,$fName.' '.$mName.' '.$lName);
      
     }else {
         echo "Error: " . $query . "<br>" . $connect->error;
@@ -144,7 +145,7 @@ function sendPasswordMail($password,$emailAddress,$studentName){
     
     
     
-    $to =$email;
+    $to =$emailAddress;
    
     $subject = "Account Creation Notice";
 

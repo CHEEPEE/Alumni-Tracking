@@ -17,8 +17,9 @@ class MainContainer extends React.Component {
         </div>
         <div
           style={{
-            height: "85%",
+            height: "130%",
             backgroundImage: `url(${upload_dir + "uu.jpg"})`,
+            backgroundAttachment:"fixed",
             backgroundSize: "cover",
           }}
           className="row"

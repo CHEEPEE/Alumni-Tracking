@@ -157,14 +157,64 @@ class UpdateProfile extends React.Component {
     }
   }
 
-  updateProfile() {
-    ajaxHandler({ ...this.state, requestType: "updateProfile" }, data => {
-      if (data == "success") {
-        alert("Account Updated");
-      }
-      this.profile;
-    });
+  validate = () => {
     console.log(this.state);
+
+    if (
+      this.state.student_id == "" ||
+      this.state.photo == "" ||
+      this.state.batch == "" ||
+      this.state.first_name == "" ||
+      this.state.middle_name == "" ||
+      this.state.last_name == "" ||
+      this.state.email == "" ||
+      this.state.birthdate == "" ||
+      this.state.gender == "" ||
+      this.state.address == "" ||
+      this.state.permanent_address == "" ||
+      this.state.course == ""
+    ) {
+      // return false;
+    }
+  };
+  updateProfile() {
+    let first_name = $("#first_name").val();
+    let middle_name = $("#middle_name").val();
+    let last_name = $("#last_name").val();
+    let email = $("#email").val();
+    let birthdate = $("#birthday").val();
+    let gender = $("#gender").val();
+    let address = $("#current_address").val();
+    let contact_number = $("#number").val();
+    let permanent_address = $("#permanent_address").val();
+    let course = $("#course").val();
+    let user_type = $("#user_type").val();
+    let batch = $("#batch").val();
+
+    if (
+      batch == "" ||
+      first_name == "" ||
+      middle_name == "" ||
+      last_name == "" ||
+      email == "" ||
+      birthdate == "" ||
+      gender == "" ||
+      address == "" ||
+      permanent_address == "" ||
+      course == "" ||
+      contact_number == "" ||
+      user_type == ""
+    ) {
+      alert("Please Fill up All fields");
+    } else {
+      ajaxHandler({ ...this.state, requestType: "updateProfile" }, data => {
+        if (data == "success") {
+          alert("Account Updated");
+        }
+        this.profile;
+      });
+      console.log(this.state);
+    }
   }
   profile() {
     ajaxHandler(
@@ -269,7 +319,8 @@ class UpdateProfile extends React.Component {
                   <input
                     disabled
                     type="email"
-                    value={this.state.student_id}
+                    id="studentId"
+                    defaultValue={this.state.student_id}
                     class="form-control mt-1 form-control-sm"
                     aria-describedby="emailHelp"
                   />
@@ -280,6 +331,7 @@ class UpdateProfile extends React.Component {
                   </small>
                   <input
                     type="email"
+                    id="first_name"
                     onChange={text => {
                       this.setState({
                         first_name: text.target.value
@@ -296,6 +348,7 @@ class UpdateProfile extends React.Component {
                   </small>
                   <input
                     type="email"
+                    id="middle_name"
                     onChange={text => {
                       this.setState({
                         middle_name: text.target.value
@@ -312,6 +365,7 @@ class UpdateProfile extends React.Component {
                   </small>
                   <input
                     type="email"
+                    id="last_name"
                     onChange={text => {
                       this.setState({
                         last_name: text.target.value
@@ -328,6 +382,7 @@ class UpdateProfile extends React.Component {
                   </small>
                   <input
                     type="email"
+                    id="email"
                     onChange={text => {
                       this.setState({
                         email: text.target.value
@@ -344,6 +399,7 @@ class UpdateProfile extends React.Component {
                   </small>
                   <input
                     type="email"
+                    id="number"
                     onChange={text => {
                       this.setState({
                         number: text.target.value
@@ -430,6 +486,7 @@ class UpdateProfile extends React.Component {
                   </small>
                   <input
                     type="email"
+                    id="birthday"
                     onChange={text => {
                       this.setState({
                         birthdate: text.target.value
@@ -456,6 +513,7 @@ class UpdateProfile extends React.Component {
                   </small>
                   <input
                     type="email"
+                    id="current_address"
                     onChange={text => {
                       this.setState({
                         address: text.target.value
@@ -472,6 +530,7 @@ class UpdateProfile extends React.Component {
                   </small>
                   <input
                     type="email"
+                    id="permanent_address"
                     onChange={text => {
                       this.setState({
                         permanent_address: text.target.value
@@ -487,7 +546,6 @@ class UpdateProfile extends React.Component {
                     Couse
                   </small>
                   <select
-                    id="course"
                     onChange={text => {
                       $("#course").on("change", function() {
                         $("option:selected", this)
@@ -511,8 +569,8 @@ class UpdateProfile extends React.Component {
                     <option value="BSCS">
                       Bachelor Of Science in Computer Science
                     </option>
-                    <option value="BSIS">
-                      Bachelor Of Science in Information System
+                    <option value="BSCPE">
+                      Bachelor Of Science in Computer Engineering
                     </option>
                   </select>
                   {/* <input
@@ -532,7 +590,7 @@ class UpdateProfile extends React.Component {
                     User Type
                   </small>
                   <select
-                    id="userType"
+                    id="user_type"
                     onChange={text => {
                       this.setState({
                         is_graduate: text.target.value
@@ -552,6 +610,7 @@ class UpdateProfile extends React.Component {
                   </small>
 
                   <input
+                    id="batch"
                     type="text"
                     onChange={e => {
                       this.setState({

@@ -8,6 +8,7 @@ class UpdateWork extends React.Component {
     let context = this;
     ajaxHandler({ requestType: "fetchCurrentJob" }, data => {
       JSON.parse(data).map(function(object, index) {
+        // console.log(object);
         context.setState({
           currentJobProfile: { ...object },
           loaded: true
@@ -137,8 +138,8 @@ class UpdateWork extends React.Component {
                       <div className="col  d-flex justify-content-end">
                         <button
                           type="button"
-                          // data-toggle="modal"
-                          // data-target="#addBusiness"
+                          data-toggle="modal"
+                          data-target="#updateModal"
                           className="btn btn-warning btn-sm "
                         >
                           Edit
@@ -172,6 +173,7 @@ class UpdateWork extends React.Component {
             </button>
           </div>
         </div>
+        <UpdateCurrentJob {...this.state.currentJobProfile} />
         <AddJobModal
           fetchJob={this.fetchJob}
           fetchJobHistory={this.fetchJobHistory}
@@ -214,14 +216,347 @@ class JobHistoryItem extends React.Component {
                 {this.state.job_start}
               </span>
             </div>
-            <div className="col  d-flex justify-content-end">
+            {/* <div className="col  d-flex justify-content-end">
               <button
                 type="button"
-                // data-toggle="modal"
-                // data-target="#addBusiness"
+                data-toggle="modal"
                 className="btn btn-warning btn-sm "
               >
                 Edit
+              </button>
+            </div> */}
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+class UpdateCurrentJob extends React.Component {
+  state = {};
+  fetchJobCategory = () => {
+    let sup = this;
+    ajaxHandler({ requestType: "fetchJobCategory" }, data => {
+      console.log(data);
+      let listItem = JSON.parse(data).map(function(object, index) {
+        return (
+          <option key={index} value={object.id}>
+            {object.category}
+          </option>
+        );
+      });
+      ReactDOM.render(
+        <React.Fragment>
+          <small class="form-text font-weight-bold text-muted">
+            Job Inline
+          </small>
+          <select
+            onChange={text => {
+              this.setState({ jobInline: text.target.value });
+            }}
+            class="form-control form-control-sm"
+            id="currentJobInline"
+          >
+            <option>Select Inline Job</option>
+            {listItem}
+          </select>
+        </React.Fragment>,
+        document.getElementById("updatejobInlineSelect")
+      );
+      // $("#currentJobInline").val(sup.props.job_inline);
+    });
+    console.log(this.props.job_inline);
+  };
+
+  componentDidMount() {
+    this.fetchJobCategory();
+    console.log(this.props);
+  }
+  render() {
+    return (
+      <div
+        className="modal fade"
+        id="updateModal"
+        tabIndex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-lg" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                Update Current Job Description
+              </h5>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="row">
+                <div className="col p-3">
+                  <div class="form-group">
+                    <small class="form-text font-weight-bold text-muted">
+                      Job Title
+                    </small>
+                    <input
+                      type="text"
+                      onChange={text => {
+                        this.setState({
+                          jobTitle: text.target.value
+                        });
+                      }}
+                      defaultValue={this.props.job_title}
+                      class="form-control mt-1 form-control-sm"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <small class="form-text font-weight-bold text-muted">
+                      Job Salary
+                    </small>
+                    <select
+                      onChange={select => {
+                        this.setState({
+                          jobSalary: select.target.value
+                        });
+                      }}
+                      class="form-control"
+                      value={this.props.job_salary}
+                    >
+                      <option value="s1" selected>
+                        Less than 10K
+                      </option>
+                      <option value="s2">10K- 15K</option>
+                      <option value="s3">16K - 20K</option>
+                      <option value="s4">21K - 30K</option>
+                      <option value="s5">30K - 50K</option>
+                      <option value="s6">50K - 80K</option>
+                      <option value="s7">80K - 100K</option>
+                      <option value="s8">100K - 150K</option>
+                      <option value="s9">150K - 200k</option>
+                      <option value="s10">200K - 500K</option>
+                      <option value="s11">Greater than 500K</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="col p-3">
+                  <div class="form-group">
+                    <small class="form-text font-weight-bold text-muted">
+                      Job Started
+                    </small>
+                    <input
+                      type="date"
+                      onChange={text => {
+                        this.setState({
+                          jobStart: text.target.value
+                        });
+                      }}
+                      defaultValue={this.props.job_start}
+                      class="form-control mt-1 form-control-sm"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class={"form-group"}>
+                    <small class="form-text font-weight-bold text-muted">
+                      Job End
+                    </small>
+                    <input
+                      type="date"
+                      onChange={text => {
+                        this.setState({
+                          jobEnd: text.target.value
+                        });
+                      }}
+                      defaultValue={this.props.job_end}
+                      class={"form-control mt-1 form-control-sm"}
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="form-group" id="updatejobInlineSelect" />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="button" className="btn btn-primary">
+                Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+class UpdateJobHistoryModall extends React.Component {
+  state = {};
+  fetchJobCategory = () => {
+    let sup = this;
+    ajaxHandler({ requestType: "fetchJobCategory" }, data => {
+      console.log(data);
+      let listItem = JSON.parse(data).map(function(object, index) {
+        return (
+          <option key={index} value={object.id}>
+            {object.category}
+          </option>
+        );
+      });
+      ReactDOM.render(
+        <React.Fragment>
+          <small class="form-text font-weight-bold text-muted">
+            Job Inline
+          </small>
+          <select
+            value={sup.props.job_inline}
+            onChange={text => {
+              this.setState({ jobInline: text.target.value });
+            }}
+            class="form-control form-control-sm"
+          >
+            <option>Select Inline Job</option>
+            {listItem}
+          </select>
+        </React.Fragment>,
+        document.getElementById("updateJobHistory")
+      );
+    });
+  };
+  componentDidMount() {
+    this.fetchJobCategory();
+  }
+  render() {
+    return (
+      <div
+        className="modal fade"
+        id="updateModal"
+        tabIndex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-lg" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                Update Current Job Description
+              </h5>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="row">
+                <div className="col p-3">
+                  <div class="form-group">
+                    <small class="form-text font-weight-bold text-muted">
+                      Job Title
+                    </small>
+                    <input
+                      type="text"
+                      onChange={text => {
+                        this.setState({
+                          jobTitle: text.target.value
+                        });
+                      }}
+                      defaultValue={this.props.job_title}
+                      class="form-control mt-1 form-control-sm"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <small class="form-text font-weight-bold text-muted">
+                      Job Salary
+                    </small>
+                    <select
+                      onChange={select => {
+                        this.setState({
+                          jobSalary: select.target.value
+                        });
+                      }}
+                      class="form-control"
+                      value={this.props.job_salary}
+                    >
+                      <option value="s1" selected>
+                        Less than 10K
+                      </option>
+                      <option value="s2">10K- 15K</option>
+                      <option value="s3">16K - 20K</option>
+                      <option value="s4">21K - 30K</option>
+                      <option value="s5">30K - 50K</option>
+                      <option value="s6">50K - 80K</option>
+                      <option value="s7">80K - 100K</option>
+                      <option value="s8">100K - 150K</option>
+                      <option value="s9">150K - 200k</option>
+                      <option value="s10">200K - 500K</option>
+                      <option value="s11">Greater than 500K</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="col p-3">
+                  <div class="form-group">
+                    <small class="form-text font-weight-bold text-muted">
+                      Job Started
+                    </small>
+                    <input
+                      type="date"
+                      onChange={text => {
+                        this.setState({
+                          jobStart: text.target.value
+                        });
+                      }}
+                      defaultValue={this.props.job_start}
+                      class="form-control mt-1 form-control-sm"
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class={"form-group"}>
+                    <small class="form-text font-weight-bold text-muted">
+                      Job End
+                    </small>
+                    <input
+                      type="date"
+                      onChange={text => {
+                        this.setState({
+                          jobEnd: text.target.value
+                        });
+                      }}
+                      defaultValue={this.props.job_end}
+                      class={"form-control mt-1 form-control-sm"}
+                      aria-describedby="emailHelp"
+                    />
+                  </div>
+                  <div class="form-group" id="updateJobHistory" />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="button" className="btn btn-primary">
+                Save changes
               </button>
             </div>
           </div>
@@ -382,23 +717,6 @@ class AddJobModal extends React.Component {
                       aria-describedby="emailHelp"
                     />
                   </div>
-                  {/* <div class="form-group row">
-                    <div class="col-sm-10">
-                      <div class="form-check">
-                        <input
-                          id="isCurrentWork"
-                          onClick={check => {
-                            this.currentWork();
-                          }}
-                          class="form-check-input"
-                          type="checkbox"
-                        />
-                        <label class="form-check-label" for="gridCheck1">
-                          <small>Current Job?</small>
-                        </label>
-                      </div>
-                    </div>
-                  </div> */}
                   <div class={"form-group"}>
                     <small class="form-text font-weight-bold text-muted">
                       Job End
