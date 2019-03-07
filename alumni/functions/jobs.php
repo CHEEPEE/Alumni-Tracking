@@ -22,6 +22,27 @@ function notCurrentJob($user_id,$job_id){
     }
 }
 
+
+if($requestType == "updateCurrentJob"){
+    include '../Database.php';
+    session_start();
+    $user_id = $_SESSION['user_id'];
+    $jobTitle = getValue("jobTitle");
+    $jobSalary = getValue("jobSalary");
+    $jobStart = getValue("jobStart");
+    $jobEnd = getValue("jobEnd");
+    $jobInline = getValue("jobInline");
+
+    $query = "Update job_profiles set
+        job_title ='$jobTitle',job_salary = '$jobSalary',job_start = '$jobStart',job_end = '$jobEnd',job_inline = '$jobInline' where user_id = '$user_id'";
+    
+    if(mysqli_query($connect,$query)) 
+    {
+        echo "success";
+    }else {
+        echo "Error: " . $query . "<br>" . $connect->error;
+    }
+}
 if($requestType == "addJobDes"){
     include '../Database.php';
     session_start();

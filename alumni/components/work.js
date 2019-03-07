@@ -173,7 +173,10 @@ class UpdateWork extends React.Component {
             </button>
           </div>
         </div>
-        <UpdateCurrentJob {...this.state.currentJobProfile} />
+        <UpdateCurrentJob
+          {...this.state.currentJobProfile}
+          fetchJob={this.fetchJob}
+        />
         <AddJobModal
           fetchJob={this.fetchJob}
           fetchJobHistory={this.fetchJobHistory}
@@ -251,13 +254,13 @@ class UpdateCurrentJob extends React.Component {
             Job Inline
           </small>
           <select
-            onChange={text => {
-              this.setState({ jobInline: text.target.value });
-            }}
+            // onChange={text => {
+            //   // this.setState({ jobInline: text.target.value });
+            // }}
             class="form-control form-control-sm"
-            id="currentJobInline"
+            id="currentJobInlineUpdate"
           >
-            <option>Select Inline Job</option>
+            <option value="nan">Select Inline Job</option>
             {listItem}
           </select>
         </React.Fragment>,
@@ -268,9 +271,32 @@ class UpdateCurrentJob extends React.Component {
     console.log(this.props.job_inline);
   };
 
+  updateJob = () => {
+    let sup = this;
+    let currentJob = {
+      jobTitle: this.getValue("currentJobTitle"),
+      jobSalary: this.getValue("salaryRangeCurrent"),
+      jobStart: this.getValue("jobStartCurrent"),
+      jobEnd: this.getValue("jobEndCurrent"),
+      jobInline: this.getValue("currentJobInlineUpdate")
+    };
+    console.log({ ...currentJob });
+    ajaxHandler({ requestType: "updateCurrentJob", ...currentJob }, data => {
+      console.log(data);
+      $("#updateModal").modal("toggle");
+      sup.props.fetchJob();
+    });
+  };
+
+  getValue = id => {
+    return document.querySelector("#" + id).value;
+  };
+
   componentDidMount() {
     this.fetchJobCategory();
     console.log(this.props);
+    // $("#salaryRangeCurrent").val(this.props.job_salary);
+    // document.querySelector("#salaryRangeCurrent").value = this.props.job_salary;
   }
   render() {
     return (
@@ -311,6 +337,7 @@ class UpdateCurrentJob extends React.Component {
                           jobTitle: text.target.value
                         });
                       }}
+                      id="currentJobTitle"
                       defaultValue={this.props.job_title}
                       class="form-control mt-1 form-control-sm"
                       aria-describedby="emailHelp"
@@ -321,13 +348,9 @@ class UpdateCurrentJob extends React.Component {
                       Job Salary
                     </small>
                     <select
-                      onChange={select => {
-                        this.setState({
-                          jobSalary: select.target.value
-                        });
-                      }}
+                      id="salaryRangeCurrent"
                       class="form-control"
-                      value={this.props.job_salary}
+                      // defaultValue={this.props.job_salary}
                     >
                       <option value="s1" selected>
                         Less than 10K
@@ -357,6 +380,7 @@ class UpdateCurrentJob extends React.Component {
                           jobStart: text.target.value
                         });
                       }}
+                      id="jobStartCurrent"
                       defaultValue={this.props.job_start}
                       class="form-control mt-1 form-control-sm"
                       aria-describedby="emailHelp"
@@ -373,6 +397,7 @@ class UpdateCurrentJob extends React.Component {
                           jobEnd: text.target.value
                         });
                       }}
+                      id="jobEndCurrent"
                       defaultValue={this.props.job_end}
                       class={"form-control mt-1 form-control-sm"}
                       aria-describedby="emailHelp"
@@ -390,7 +415,13 @@ class UpdateCurrentJob extends React.Component {
               >
                 Close
               </button>
-              <button type="button" className="btn btn-primary">
+              <button
+                onClick={() => {
+                  this.updateJob();
+                }}
+                type="button"
+                className="btn btn-primary"
+              >
                 Save changes
               </button>
             </div>

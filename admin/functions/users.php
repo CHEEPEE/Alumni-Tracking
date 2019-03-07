@@ -32,6 +32,41 @@ if($requestType == "addUser"){
     }
 }
 
+if($requestType == "updateUserEmailAndUserId"){
+    include '../Database.php';
+    $user_id = getValue("user_id");
+    $new_userId = getValue("new_userId");
+    $email = getValue("email");
+    if(isIdAvailable($new_userId)){
+       
+        $anotherQuery = "Update alumni set user_id = '$new_userId', email = '$email' where user_id = '$user_id'";
+        if(mysqli_query($connect,$anotherQuery)) 
+        {
+            echo 'success';
+        }else {
+            echo "Error: " . $anotherQuery . "<br>" . $connect->error;
+        }
+      
+        
+        updateUserEmailAndID($user_id,$new_userId,$email);
+    }else{  
+        echo "Student ID Taken";
+    }
+}
+
+function updateUserEmailAndID($user_id,$new_userId,$email){
+    include '../Database.php';
+    $updateSQL = "Update users set user_id = '$new_userId', username = '$email' where user_id = '$user_id'";
+    if(mysqli_query($connect,$updateSQL)) 
+    {
+        echo 'success';
+     
+    }else {
+        echo "Error: " . $updateSQL . "<br>" . $connect->error;
+    }
+   
+}
+
 if($requestType == "getProfile"){
     include '../Database.php';
     $user_id = getValue('user_id');

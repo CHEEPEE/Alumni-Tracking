@@ -5,6 +5,7 @@ class UpdateBusiness extends React.Component {
       var listItem = JSON.parse(data).map(function(object, index) {
         return (
           <BusinessItem
+            index={index}
             businessName={object.business_name}
             businessCat={object.categoryName}
             businessStart={object.business_start}
@@ -56,38 +57,130 @@ class BusinessItem extends React.Component {
   state = {};
   render() {
     return (
-      <div className="row">
-        <div class={"alert alert-light border border-muted w-75 "} role="alert">
-          <h4 class="alert-heading">{this.props.businessName}</h4>
-          <p>
-            <span class="badge badge-muted p-2">
-              Business Category: {this.props.businessCat}
-            </span>
-          </p>
-          <hr />
-          <div className="row">
-            <div className="col-auto">
-              <small>Business Started</small>
-            </div>
-            <div className="col">
-              <span class="badge badge-success p-2">
-                {this.props.businessStart}
+      <React.Fragment>
+        <div className="row">
+          <div
+            class={"alert alert-light border border-muted w-75 "}
+            role="alert"
+          >
+            <h4 class="alert-heading">{this.props.businessName}</h4>
+            <p>
+              <span class="badge badge-muted p-2">
+                Business Category: {this.props.businessCat}
               </span>
-            </div>
-            <div className="col d-flex justify-content-end">
-              <button
-                type="button"
-                
-                // data-toggle="modal"
-                // data-target="#addBusiness"
-                className="btn btn-warning btn-sm "
-              >
-                Edit
-              </button>
+            </p>
+            <hr />
+            <div className="row">
+              <div className="col-auto">
+                <small>Business Started</small>
+              </div>
+              <div className="col">
+                <span class="badge badge-success p-2">
+                  {this.props.businessStart}
+                </span>
+              </div>
+              <div className="col d-flex justify-content-end">
+                <button
+                  type="button"
+                  // data-toggle="modal"
+                  // data-target="#addBusiness"
+                  className="btn btn-warning btn-sm "
+                  onClick={() => {
+                    $("#updateBusiness" + this.props.index).modal("toggle");
+                  }}
+                >
+                  Edit
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        <UpdateBusinessModal {...this.props} />
+      </React.Fragment>
+    );
+  }
+}
+
+class UpdateBusinessModal extends React.Component {
+  state = {};
+  updateBusiness = () => {
+    let business = { businessName: "", businessCat: "", businessStart: "" };
+  };
+  render() {
+    let { props } = this;
+    return (
+      <React.Fragment>
+        <div
+          className="modal fade"
+          id={"updateBusiness" + props.index}
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">
+                  Update Business
+                </h5>
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Business Name</label>
+                  <input
+                    type="text"
+                    id={"updateBusinessName" + props.index}
+                    class="form-control"
+                    aria-describedby="emailHelp"
+                    defaultValue={props.businessName}
+                    placeholder="Enter Business Name"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">
+                    Select Business Type
+                  </label>
+                  <select class="form-control" id="businessInLine" />
+                </div>
+                <div class="form-group">
+                  <small class="form-text font-weight-bold text-muted">
+                    Business Started
+                  </small>
+                  <input
+                    type="date"
+                    id={"updateBusinessStart" + props.index}
+                    defaultValue={props.business_start}
+                    class="form-control mt-1 form-control-sm"
+                    aria-describedby="emailHelp"
+                  />
+                </div>
+              </div>
+
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button type="button" className="btn btn-primary">
+                  Save changes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
     );
   }
 }

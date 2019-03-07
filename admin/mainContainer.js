@@ -217,7 +217,7 @@ class DashboardContainer extends React.Component {
               <option value="">All Course</option>
               <option value="BSIT">BS Inforamation Technology</option>
               <option value="BSCS">BS Computer Science</option>
-              <option value="BSIS">BS Inforamation System</option>
+              <option value="BSCPE">BS Computer Engineering</option>
             </select>
           </div>
         </div>
@@ -426,6 +426,9 @@ class UserManagementContainer extends React.Component {
           </div>
           <div className="col-1 font-weight-bold">
             <small>Course</small>
+          </div>
+          <div className="col-1 font-weight-bold">
+            <small />
           </div>
           <div className="col-1 font-weight-bold">
             <small />
@@ -734,9 +737,9 @@ class AddUserModal extends React.Component {
     return true;
   }
   clearValue() {
-    document.querySelector("#email").value = "";
-    document.querySelector("#password").value = "";
-    document.querySelector("#studentId").value = "";
+    document.querySelector("#addUserEmail").value = "";
+    document.querySelector("#addUserPassword").value = "";
+    document.querySelector("#addUserId").value = "";
     // document.querySelector("#fName").value = "";
     // document.querySelector("#mName").value = "";
     // document.querySelector("#lName").value = "";
@@ -749,8 +752,8 @@ class AddUserModal extends React.Component {
   }
   addUser() {
     let sup = this;
-    let studentId = document.querySelector("#studentId").value;
-    let email = document.querySelector("#email").value;
+    let studentId = document.querySelector("#addUserId").value;
+    let email = document.querySelector("#addUserEmail").value;
 
     let fName = "";
     let mName = "";
@@ -810,7 +813,7 @@ class AddUserModal extends React.Component {
           course: course,
           birthDate: birthDate,
           requestType: "addUser",
-          password: document.querySelector("#password").value
+          password: document.querySelector("#addUserPassword").value
         },
         success: function(data) {
           console.log(data);
@@ -865,7 +868,7 @@ class AddUserModal extends React.Component {
                       <label for="exampleInputEmail1">Student ID</label>
                       <input
                         type="text"
-                        id="studentId"
+                        id="addUserId"
                         className="form-control form-control-sm"
                         onChange={text => {
                           this.setState({
@@ -883,7 +886,7 @@ class AddUserModal extends React.Component {
                       <label for="exampleInputEmail1">Email address</label>
                       <input
                         type="email"
-                        id="email"
+                        id="addUserEmail"
                         className="form-control form-control-sm"
                         onChange={text => {
                           this.setState({
@@ -900,14 +903,13 @@ class AddUserModal extends React.Component {
                       <label for="exampleInputEmail1">Password</label>
                       <input
                         type={this.state.showPassword ? "text" : "password"}
-                        id="password"
+                        id="addUserPassword"
                         className="form-control form-control-sm"
                         onChange={text => {
                           this.setState({
                             password: text.target.value
                           });
                         }}
-                        defaultValue={this.state.email}
                         aria-describedby="emailHelp"
                         placeholder="Enter Password"
                         required
@@ -957,6 +959,33 @@ class AlumniListItem extends React.Component {
       );
     }
   };
+  updateUser = () => {
+    console.log("update function");
+
+    let userId = this.props.studentId;
+    let new_userId = document.querySelector("#updateStudentId").value;
+    let email = document.querySelector("#updatEmail").value;
+    ajaxHandler(
+      {
+        user_id: userId,
+        new_userId: new_userId,
+        email: email,
+        requestType: "updateUserEmailAndUserId"
+      },
+      data => {
+        console.log(data);
+
+        if (data.trim() == "Student ID Taken".trim()) {
+          alert("ID already Taken");
+        } else {
+          this.props.fetchUsers();
+          $("#updateUserEmailAndStudentId" + this.props.studentId).modal(
+            "toggle"
+          );
+        }
+      }
+    );
+  };
   render() {
     return (
       <React.Fragment>
@@ -991,6 +1020,19 @@ class AlumniListItem extends React.Component {
             <button
               type="button"
               onClick={() => {
+                $("#updateUserEmailAndStudentId" + this.props.studentId).modal(
+                  "toggle"
+                );
+              }}
+              className="btn btn-primary"
+            >
+              Update
+            </button>
+          </div>
+          <div className="col-1">
+            <button
+              type="button"
+              onClick={() => {
                 this.props.viewProfile(this.props);
               }}
               className="btn btn-success"
@@ -1010,7 +1052,186 @@ class AlumniListItem extends React.Component {
             </button>
           </div>
         </div>
+        <div
+          className="modal fade"
+          id={"updateUserEmailAndStudentId" + this.props.studentId}
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalCenterTitle"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog modal-dialog-centered" role="document">
+            <div className="modal-content ">
+              <div className="modal-body">
+                <div className="card-body">
+                  <div className="row pl-3">
+                    <h3>Update User Email And ID</h3>
+                  </div>
+                  <div className="row w-100 mt-3">
+                    <div className="w-100 pl-3">
+                      <div className="form-group">
+                        <label for="exampleInputEmail1">Student ID</label>
+                        <input
+                          type="text"
+                          id="updateStudentId"
+                          className="form-control form-control-sm"
+                          onChange={text => {
+                            this.setState({
+                              studentId: text.target.value
+                            });
+                            // this.validateId()
+                          }}
+                          defaultValue={this.props.studentId}
+                          aria-describedby="emailHelp"
+                          placeholder="Student ID"
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input
+                          type="email"
+                          id="updatEmail"
+                          className="form-control form-control-sm"
+                          onChange={text => {
+                            this.setState({
+                              email: text.target.value
+                            });
+                          }}
+                          defaultValue={this.props.email}
+                          aria-describedby="emailHelp"
+                          placeholder="Enter email"
+                          required
+                        />
+                      </div>
+                      <div
+                        onClick={() => {
+                          this.updateUser();
+                        }}
+                        className="btn btn-sm btn-primary"
+                      >
+                        Update
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </React.Fragment>
+    );
+  }
+}
+
+class UpdateUserEmailAndStudentId extends React.Component {
+  state = {};
+  render() {
+    return (
+      <div
+        className="modal fade"
+        id={"updateUserEmailAndStudentId" + this.props.userId}
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered" role="document">
+          <div className="modal-content ">
+            <div className="modal-body">
+              <div className="card-body">
+                <div className="row pl-3">
+                  <h3>Update User Email And ID</h3>
+                </div>
+                <div className="row w-100 mt-3">
+                  <form
+                    id="loginForm"
+                    className="w-100 pl-3"
+                    onSubmit={e => {
+                      e.preventDefault();
+                      // this.register()
+                      // this.addUser();
+                    }}
+                  >
+                    <div className="form-group">
+                      <label for="exampleInputEmail1">Student ID</label>
+                      <input
+                        type="text"
+                        id="updateStudentId"
+                        className="form-control form-control-sm"
+                        onChange={text => {
+                          this.setState({
+                            studentId: text.target.value
+                          });
+                          // this.validateId()
+                        }}
+                        defaultValue={this.props.userId}
+                        aria-describedby="emailHelp"
+                        placeholder="Student ID"
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label for="exampleInputEmail1">Email address</label>
+                      <input
+                        type="email"
+                        id="updatEmail"
+                        className="form-control form-control-sm"
+                        onChange={text => {
+                          this.setState({
+                            email: text.target.value
+                          });
+                        }}
+                        defaultValue={this.props.email}
+                        aria-describedby="emailHelp"
+                        placeholder="Enter email"
+                        required
+                      />
+                    </div>
+                    {/* <div className="form-group">
+                      <label for="exampleInputEmail1">Password</label>
+                      <input
+                        type={this.state.showPassword ? "text" : "password"}
+                        id="password"
+                        className="form-control form-control-sm"
+                        onChange={text => {
+                          this.setState({
+                            password: text.target.value
+                          });
+                        }}
+                        // defaultValue={}
+                        aria-describedby="emailHelp"
+                        placeholder="Enter Password"
+                        required
+                      />
+                    </div> */}
+                    {/* <div class="form-group form-check">
+                      <input
+                        type="checkbox"
+                        onChange={text => {
+                          this.setState({
+                            showPassword: !this.state.showPassword
+                          });
+                        }}
+                        class="form-check-input"
+                        id="exampleCheck1"
+                      />
+                      <label class="form-check-label" for="exampleCheck1">
+                        show password
+                      </label>
+                    </div> */}
+
+                    {/* {this.state.alert.trim().length==0?"":errorHandler(this.state.alert)} */}
+                    <button type="submit" className="btn btn-sm btn-primary">
+                      Register
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 }
