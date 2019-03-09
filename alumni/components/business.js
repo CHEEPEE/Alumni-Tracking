@@ -1,13 +1,17 @@
 class UpdateBusiness extends React.Component {
   getBusiness = () => {
+    let sup = this;
     ajaxHandler({ requestType: "getBusinesses" }, data => {
       console.log(data);
       var listItem = JSON.parse(data).map(function(object, index) {
         return (
           <BusinessItem
             index={index}
+            getBusiness={sup.getBusiness}
+            business_profile_id={object.id}
             businessName={object.business_name}
             businessCat={object.categoryName}
+            business_category={object.business_category}
             businessStart={object.business_start}
           />
         );
@@ -66,7 +70,7 @@ class BusinessItem extends React.Component {
             <h4 class="alert-heading">{this.props.businessName}</h4>
             <p>
               <span class="badge badge-muted p-2">
-                Business Category: {this.props.businessCat}
+                Business Category: {this.props.business_category}
               </span>
             </p>
             <hr />
@@ -104,7 +108,26 @@ class BusinessItem extends React.Component {
 class UpdateBusinessModal extends React.Component {
   state = {};
   updateBusiness = () => {
-    let business = { businessName: "", businessCat: "", businessStart: "" };
+    let { props } = this;
+    console.log("update");
+
+    let business = {
+      id: props.business_profile_id,
+      businessName: document.querySelector("#updateBusinessName" + props.index)
+        .value,
+      businessCat: document.querySelector(
+        "#updateBusinessCategory" + props.index
+      ).value,
+      businessStart: document.querySelector(
+        "#updateBusinessStart" + props.index
+      ).value
+    };
+    ajaxHandler({ requestType: "updateBusiness", ...business }, data => {
+      if (data == "success") {
+        props.getBusiness();
+        $("#updateBusiness" + props.index).modal("toggle");
+      }
+    });
   };
   render() {
     let { props } = this;
@@ -149,7 +172,13 @@ class UpdateBusinessModal extends React.Component {
                   <label for="exampleFormControlSelect1">
                     Select Business Type
                   </label>
-                  <select class="form-control" id="businessInLine" />
+                  <input
+                    type="text"
+                    id={"updateBusinessCategory" + props.index}
+                    defaultValue={props.business_category}
+                    class="form-control mt-1 form-control-sm"
+                    aria-describedby="emailHelp"
+                  />
                 </div>
                 <div class="form-group">
                   <small class="form-text font-weight-bold text-muted">
@@ -173,9 +202,15 @@ class UpdateBusinessModal extends React.Component {
                 >
                   Close
                 </button>
-                <button type="button" className="btn btn-primary">
+                <div
+                  type="button"
+                  onClick={() => {
+                    this.updateBusiness();
+                  }}
+                  className="btn btn-primary"
+                >
                   Save changes
-                </button>
+                </div>
               </div>
             </div>
           </div>
@@ -267,17 +302,17 @@ class AddBusinessModal extends React.Component {
                 />
               </div>
               <div class="form-group">
-                <label for="exampleFormControlSelect1">
-                  Select Business Type
-                </label>
-                <select
-                  class="form-control"
-                  id="businessInLine"
-                  onChange={context => {
+                <label for="exampleFormControlSelect1">Business Type</label>
+                <input
+                  type="text"
+                  onChange={text => {
                     this.setState({
-                      businessCat: context.target.value
+                      businessCat: text.target.value
                     });
                   }}
+                  defaultValue={this.state.jobStart}
+                  class="form-control mt-1 form-control-sm"
+                  aria-describedby="emailHelp"
                 />
               </div>
               <div class="form-group">

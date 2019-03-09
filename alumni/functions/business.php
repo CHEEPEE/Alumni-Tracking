@@ -21,6 +21,25 @@ if($requestType == "saveBusiness"){
     }
 }
 
+if($requestType == "updateBusiness"){
+    include '../Database.php';
+    session_start();
+    $user_id = $_SESSION['user_id'];
+    $businessName = getValue('businessName');
+    $businessCat = getValue("businessCat");
+    $businessStart = getValue("businessStart");
+    $id = getValue("id");
+    // $businessEnd = getValue("businessEnd");
+    $query = "update business_profiles set
+        business_category_id = '$businessCat',business_name = '$businessName',business_start = '$businessStart' where business_id = $id";
+    if(mysqli_query($connect,$query)) 
+    {
+        echo "success";
+    }else {
+        echo "Error: " . $query . "<br>" . $connect->error;
+    }
+}
+
 if($requestType == "getBusinesses"){
     include '../Database.php';
     session_start();
@@ -40,7 +59,9 @@ if($requestType == "getBusinesses"){
 
         $subject = new myObject();
         $subject -> business_name = $row['business_name'];
+        $subject -> business_category = $row['business_category_id'];
         $subject -> business_start = $row['business_start'];
+        $subject -> id = $row['business_id'];
         $subject -> categoryName = getBusinessCategoryName($row['business_category_id']);
         $arrayData[]=$subject;
         }
@@ -48,6 +69,8 @@ if($requestType == "getBusinesses"){
     echo json_encode($arrayData);
 
 }
+
+
 
 function getBusinessCategoryName($categoryId){
     include '../Database.php';

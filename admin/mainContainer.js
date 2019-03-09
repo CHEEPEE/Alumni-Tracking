@@ -963,8 +963,11 @@ class AlumniListItem extends React.Component {
     console.log("update function");
 
     let userId = this.props.studentId;
-    let new_userId = document.querySelector("#updateStudentId").value;
-    let email = document.querySelector("#updatEmail").value;
+    let new_userId = document.querySelector(
+      "#updateStudentId" + this.props.studentId
+    ).value;
+    let email = document.querySelector("#updatEmail" + this.props.studentId)
+      .value;
     ajaxHandler(
       {
         user_id: userId,
@@ -1073,7 +1076,7 @@ class AlumniListItem extends React.Component {
                         <label for="exampleInputEmail1">Student ID</label>
                         <input
                           type="text"
-                          id="updateStudentId"
+                          id={"updateStudentId" + this.props.studentId}
                           className="form-control form-control-sm"
                           onChange={text => {
                             this.setState({
@@ -1091,7 +1094,7 @@ class AlumniListItem extends React.Component {
                         <label for="exampleInputEmail1">Email address</label>
                         <input
                           type="email"
-                          id="updatEmail"
+                          id={"updatEmail" + this.props.studentId}
                           className="form-control form-control-sm"
                           onChange={text => {
                             this.setState({

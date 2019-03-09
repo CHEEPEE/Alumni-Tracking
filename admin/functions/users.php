@@ -37,26 +37,75 @@ if($requestType == "updateUserEmailAndUserId"){
     $user_id = getValue("user_id");
     $new_userId = getValue("new_userId");
     $email = getValue("email");
-    if(isIdAvailable($new_userId)){
+
+    if($new_userId != $user_id){
+        if(isIdAvailable($new_userId)){
        
-        $anotherQuery = "Update alumni set user_id = '$new_userId', email = '$email' where user_id = '$user_id'";
+            $anotherQuery = "Update alumni set user_id = '$new_userId', email = '$email' where user_id = '$user_id'";
+            if(mysqli_query($connect,$anotherQuery)) 
+            {
+                echo 'success';
+            }else {
+                echo "Error: " . $anotherQuery . "<br>" . $connect->error;
+            }
+            updateUserIDfromUsers($user_id,$new_userId,$email);
+            updateUserIdOnBusinessProfile($user_id,$new_userId,$email);
+            updateUserIdOnJobProfile($user_id,$new_userId,$email);
+        }else{  
+            echo "Student ID Taken";
+        }
+    }else{
+        $anotherQuery = "Update alumni set email = '$email' where user_id = '$user_id'";
         if(mysqli_query($connect,$anotherQuery)) 
         {
             echo 'success';
         }else {
             echo "Error: " . $anotherQuery . "<br>" . $connect->error;
         }
-      
-        
-        updateUserEmailAndID($user_id,$new_userId,$email);
-    }else{  
-        echo "Student ID Taken";
+        updateEmailFromUsers($user_id,$new_userId,$email);
+    }
+    
+}
+
+function updateEmailFromUsers($user_id,$new_userId,$email){
+    include '../Database.php';
+    $updateSQL = "Update users set username = '$email' where user_id = '$user_id'";
+    if(mysqli_query($connect,$updateSQL)) 
+    {
+        echo 'success';
+     
+    }else {
+        echo "Error: " . $updateSQL . "<br>" . $connect->error;
+    }
+   
+}
+
+function updateUserIDfromUsers($user_id,$new_userId,$email){
+    include '../Database.php';
+    $updateSQL = "Update users set user_id = '$new_userId' where user_id = '$user_id'";
+    if(mysqli_query($connect,$updateSQL)) 
+    {
+        echo 'success';
+     
+    }else {
+        echo "Error: " . $updateSQL . "<br>" . $connect->error;
     }
 }
 
-function updateUserEmailAndID($user_id,$new_userId,$email){
+function updateUserIdOnJobProfile($user_id,$new_userId,$email){
     include '../Database.php';
-    $updateSQL = "Update users set user_id = '$new_userId', username = '$email' where user_id = '$user_id'";
+    $updateSQL = "Update job_profiles set user_id = '$new_userId' where user_id = '$user_id'";
+    if(mysqli_query($connect,$updateSQL)) 
+    {
+        echo 'success';
+     
+    }else {
+        echo "Error: " . $updateSQL . "<br>" . $connect->error;
+    }
+}
+function updateUserIdOnBusinessProfile($user_id,$new_userId,$email){
+    include '../Database.php';
+    $updateSQL = "Update business_profiles set user_id = '$new_userId' where user_id = '$user_id'";
     if(mysqli_query($connect,$updateSQL)) 
     {
         echo 'success';
