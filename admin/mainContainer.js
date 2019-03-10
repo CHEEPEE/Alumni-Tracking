@@ -40,7 +40,7 @@ class DashboardContainer extends React.Component {
       data: {
         labels: [
           `Employed (${context.state.employed})`,
-          `Unemployed (${context.state.graduates - context.state.employed})`
+          `Unemployed (${Math.abs(context.state.graduates - context.state.employed)})`
         ],
         datasets: [
           {
@@ -48,7 +48,7 @@ class DashboardContainer extends React.Component {
             backgroundColor: ["#4dc9f6", "#58595b"],
             data: [
               context.state.employed,
-              context.state.graduates - context.state.employed
+              Math.abs(context.state.graduates - context.state.employed)
             ]
           }
         ]
