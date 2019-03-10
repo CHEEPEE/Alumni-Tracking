@@ -403,47 +403,258 @@ class EventsItemListRequest extends React.Component {
   }
   render() {
     return (
-      <div className="container mt-2 w-100 border-bottom pb-2">
-        <div className="row">
-          <small>
-            from <a className="text-primary">@{this.state.first_name}</a>
-          </small>
-          {this.props.item.eventType == "" ? (
-            ""
-          ) : (
-            <span class="ml-2 badge badge-info">
-              <small>{this.props.item.eventType}</small>
-            </span>
-          )}
-        </div>
-        <div className="row ">
-          <h5>
-            {this.props.item.whenEvent} @ {this.props.item.whereEvent}
-          </h5>
-        </div>
-        <div className="row">{this.props.item.whatEvent}</div>
-        <div className="row mt-2 d-flex flex-row-reverse bd-highlight">
-          <div className="col-auto">
-            <button
-              type="button"
-              className="btn btn-sm btn-danger"
-              onClick={() => this.props.removeEvent(this.props.item)}
-            >
-              Delete Event
-            </button>
+      <React.Fragment>
+        <div className="container mt-2 w-100 border-bottom pb-2">
+          <div className="row">
+            <small>
+              from <a className="text-primary">@{this.state.first_name}</a>
+            </small>
+            {this.props.item.eventType == "" ? (
+              ""
+            ) : (
+              <span class="ml-2 badge badge-info">
+                <small>{this.props.item.eventType}</small>
+              </span>
+            )}
           </div>
-          <div className="col-auto">
-            <button
-              type="button"
-              className="btn btn-sm btn-success"
-              onClick={() => {
-                if (confirm("Approve Event/Announcement?")) {
-                  approveAdsRequest(this.props.item.eventID);
-                }
-              }}
-            >
-              Approve Event/Advertisement
-            </button>
+          <div className="row ">
+            <h5>
+              {this.props.item.whenEvent} @ {this.props.item.whereEvent}
+            </h5>
+          </div>
+          <div className="row">{this.props.item.whatEvent}</div>
+          <div className="row mt-2 d-flex flex-row-reverse bd-highlight">
+            <div className="col-auto">
+              <button
+                type="button"
+                className="btn btn-sm btn-danger"
+                onClick={() => this.props.removeEvent(this.props.item)}
+              >
+                Delete Event
+              </button>
+            </div>
+            <div className="col-auto">
+              <button
+                type="button"
+                className="btn btn-sm btn-warning"
+                data-toggle="modal"
+                data-target={"#updateRequestModal" + this.props.item.eventID}
+              >
+                Update Event/Advertisement
+              </button>
+            </div>
+            <div className="col-auto">
+              <button
+                type="button"
+                className="btn btn-sm btn-success text-white"
+                onClick={() => {
+                  if (confirm("Approve Event/Announcement?")) {
+                    approveAdsRequest(this.props.item.eventID);
+                  }
+                }}
+              >
+                Approve Event/Advertisement
+              </button>
+            </div>
+          </div>
+        </div>
+        <UpdateRequestModal {...this.props} />
+      </React.Fragment>
+    );
+  }
+}
+
+class UpdateRequestModal extends React.Component {
+  state = {};
+
+  updateRequest = () => {
+    let {
+      item: {
+        eventID,
+        eventStatus,
+        eventType,
+        timeStamp,
+        user_id,
+        whatEvent,
+        whenEvent,
+        whereEvent
+      }
+    } = this.props;
+    let updateRequestData = {
+      whatEvent: document.querySelector("#whatEvent" + this.props.item.eventID)
+        .value,
+      whenEvent: document.querySelector("#whenEvent" + this.props.item.eventID)
+        .value,
+      whereEvent: document.querySelector(
+        "#whereEvent" + this.props.item.eventID
+      ).value,
+      eventType: document.querySelector("#eventType" + this.props.item.eventID)
+        .value,
+      eventID: this.props.item.eventID
+    };
+
+    console.log(updateRequestData);
+
+    ajaxHandler(
+      { requestType: "updateMyRequest", ...updateRequestData },
+      data => {
+        if (data.trim() == "success") {
+          $("#updateRequestModal" + eventID).modal("toggle");
+          getEventsRequest();
+        }
+      }
+    );
+  };
+  componentDidMount() {
+    console.log(this.props);
+    console.log(this.props.item.eventID);
+  }
+  render() {
+    let {
+      item: {
+        eventID,
+        eventStatus,
+        eventType,
+        timeStamp,
+        user_id,
+        whatEvent,
+        whenEvent,
+        whereEvent
+      }
+    } = this.props;
+    return (
+      <div
+        className="modal fade"
+        id={"updateRequestModal" + eventID}
+        tabIndex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalCenterTitle">
+                Update My Request for Event/Advertisement
+              </h5>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="row w-100 m-1">
+                <form className="w-100">
+                  <div className="row">
+                    <div className="col">
+                      <div className="form-group">
+                        <label for="exampleInputEmail1">
+                          <small>What Event?</small>
+                        </label>
+                        <textarea
+                          type="email"
+                          className="form-control form-control-sm"
+                          id={"whatEvent" + eventID}
+                          aria-describedby="emailHelp"
+                          defaultValue={whatEvent}
+                          placeholder={"What Event?"}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col">
+                      <div className="form-group">
+                        <label for="exampleInputEmail1">
+                          <small>Date and Time of Event?</small>
+                        </label>
+                        <input
+                          type="email"
+                          className="form-control form-control-sm"
+                          id={"whenEvent" + eventID}
+                          aria-describedby="emailHelp"
+                          defaultValue={whenEvent}
+                          placeholder={"When Event?"}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col">
+                      <div className="form-group">
+                        <label for="exampleInputEmail1">
+                          <small>Place of Event?</small>
+                        </label>
+                        <input
+                          type="email"
+                          className="form-control form-control-sm"
+                          id={"whereEvent" + eventID}
+                          defaultValue={whereEvent}
+                          aria-describedby="emailHelp"
+                          placeholder={"Where Event?"}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col">
+                      <div class="form-group">
+                        <small class="form-text font-weight-bold text-muted">
+                          Announcement Type
+                        </small>
+                        <select
+                          id={"eventType" + eventID}
+                          className="form-control form-control-sm"
+                          defaultValue={eventType}
+                          onChange={text => {
+                            $("#eventType").on("change", function() {
+                              $("option:selected", this)
+                                .hide()
+                                .siblings()
+                                .show();
+                            });
+                            // this.setState({
+                            //   gender: text.target.value
+                            // });
+                          }}
+                          // defaultValue = {"Choose Advertisement Type . . ."}
+                        >
+                          {/* <option selected>Choose Advertisement Type . . .</option> */}
+                          <option value="Announcement/Events">
+                            Announcement/Events
+                          </option>
+                          <option value="Job Opportunities">
+                            Job Opportunities
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => {
+                  this.updateRequest();
+                }}
+              >
+                Save Event
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -492,8 +703,8 @@ function approveAdsRequest(eventId) {
 
   ajaxHandler({ requestType: "getEvent", eventId: eventId }, eventDataObj => {
     console.log(eventDataObj);
-    
-    JSON.parse(eventDataObj).map((eventDetails) => {
+
+    JSON.parse(eventDataObj).map(eventDetails => {
       $.ajax({
         type: "Post",
         url: "functions/index.php",

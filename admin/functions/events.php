@@ -85,7 +85,7 @@ function getUsersToSendEmail($subject,$message,$headers){
 
 if($requestType == "fetchEvents"){
     include '../Database.php';
-    $sql = "select * from event where eventStatus = 'approved'";
+    $sql = "select * from event where eventStatus = 'approved' order by eventID desc";
     $result = $connect->query($sql);
     $arrayData = array();
     class myObject
@@ -104,6 +104,28 @@ if($requestType == "fetchEvents"){
         }
     }
     echo json_encode($arrayData);
+}
+
+if($requestType == "updateMyRequest"){
+    include '../Database.php';
+    // session_start();
+    // $user_id = $_SESSION['user_id'];
+    $eventID = getValue("eventID");
+    $whatEvent = getValue('whatEvent');
+    $whenEvent = getValue('whenEvent');
+    $whereEvent = getValue('whereEvent');
+    $eventType =  getValue('eventType');
+
+
+    $query = "update event set
+        whatEvent = '$whatEvent',whenEvent = '$whenEvent',whereEvent = '$whereEvent',eventType = '$eventType' where eventID = '$eventID'";
+    
+    if(mysqli_query($connect,$query)) 
+    {
+        echo 'success';
+    }else {
+        echo "Error: " . $query . "<br>" . $connect->error;
+    }
 }
 
 if($requestType == "updateEvent"){
@@ -125,7 +147,7 @@ if($requestType == "updateEvent"){
 
 if($requestType == "fetchEventsRequest"){
     include '../Database.php';
-    $sql = "select * from event where eventStatus = 'request'";
+    $sql = "select * from event where eventStatus = 'request' order by eventID desc";
     $result = $connect->query($sql);
     $arrayData = array();
     class myObject
