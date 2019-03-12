@@ -179,11 +179,11 @@ class DashboardContainer extends React.Component {
     chart.data.datasets[0].data = counterData;
     employmentChart.data.labels = [
       `Employed (${context.state.employed})`,
-      `Unemployed (${context.state.graduates - context.state.employed})`
+      `Unemployed (${Math.abs(context.state.graduates - context.state.employed)})`
     ];
     employmentChart.data.datasets[0].data = [
       this.state.employed,
-      this.state.graduates - this.state.employed
+      Math.abs(this.state.graduates - this.state.employed)
     ];
     employmentChart.update();
     chart.update();

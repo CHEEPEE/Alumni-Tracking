@@ -155,7 +155,21 @@ if($requestType == "deleteProfile"){
     {
         echo 'success';
     }else {
-        echo "Error: " . $sql . "<br>" . $connect->error;
+        echo "Error: " . $sq2 . "<br>" . $connect->error;
+    }
+    $sql3 = "delete from job_profiles where user_id = '$id'";
+    if(mysqli_query($connect,$sql2))
+    {
+        echo 'success';
+    }else {
+        echo "Error: " . $sq3 . "<br>" . $connect->error;
+    }
+    $sql3 = "delete from business_profiles where user_id = '$id'";
+    if(mysqli_query($connect,$sql2))
+    {
+        echo 'success';
+    }else {
+        echo "Error: " . $sq3 . "<br>" . $connect->error;
     }
 }
 
