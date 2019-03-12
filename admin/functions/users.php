@@ -16,7 +16,7 @@ if($requestType == "addUser"){
     $now = DateTime::createFromFormat('U.u', microtime(true));
     $timeStamp = $now->format("YmdHisu");
     $password = getValue('password');
-    if(isIdAvailable($studentId)){
+    if(isIdAvailable($studentId) && isEmailAvailable($email)){
         $query = "INSERT INTO alumni(user_id,first_name,middle_name,last_name,email,number,birthdate,gender,address,permanent_address,course,photo,is_graduate) 
     VALUES ('$studentId','$fName','$mName','$lName','$email','$contact','$birthDate','$gender','$address','$permaAddress','$course','placeholder.png','false')";
     if(mysqli_query($connect,$query)) 
@@ -27,8 +27,6 @@ if($requestType == "addUser"){
     }else {
         echo "Error: " . $query . "<br>" . $connect->error;
     }
-    }else{
-        echo "idTaken";
     }
 }
 
@@ -39,7 +37,7 @@ if($requestType == "updateUserEmailAndUserId"){
     $email = getValue("email");
 
     if($new_userId != $user_id){
-        if(isIdAvailable($new_userId)){
+        if(isIdAvailable($new_userId) && isEmailAvailable($email)){
        
             $anotherQuery = "Update alumni set user_id = '$new_userId', email = '$email' where user_id = '$user_id'";
             if(mysqli_query($connect,$anotherQuery)) 
@@ -51,8 +49,6 @@ if($requestType == "updateUserEmailAndUserId"){
             updateUserIDfromUsers($user_id,$new_userId,$email);
             updateUserIdOnBusinessProfile($user_id,$new_userId,$email);
             updateUserIdOnJobProfile($user_id,$new_userId,$email);
-        }else{  
-            echo "Student ID Taken";
         }
     }else{
         $anotherQuery = "Update alumni set email = '$email' where user_id = '$user_id'";

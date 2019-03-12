@@ -398,12 +398,18 @@ class UpdateProfile extends React.Component {
                     Contact Number
                   </small>
                   <input
-                    type="email"
+                    type="number"
+                    maxLength="9"
                     id="number"
                     onChange={text => {
                       this.setState({
                         number: text.target.value
                       });
+                      if ((text.target.val + "").length >= 9) {
+                        document.querySelector("#number").value = (
+                          text.target.value + ""
+                        ).substring(0, 9);
+                      }
                     }}
                     defaultValue={this.state.number}
                     class="form-control mt-1 form-control-sm"

@@ -40,7 +40,9 @@ class DashboardContainer extends React.Component {
       data: {
         labels: [
           `Employed (${context.state.employed})`,
-          `Unemployed (${Math.abs(context.state.graduates - context.state.employed)})`
+          `Unemployed (${Math.abs(
+            context.state.graduates - context.state.employed
+          )})`
         ],
         datasets: [
           {
@@ -179,7 +181,9 @@ class DashboardContainer extends React.Component {
     chart.data.datasets[0].data = counterData;
     employmentChart.data.labels = [
       `Employed (${context.state.employed})`,
-      `Unemployed (${Math.abs(context.state.graduates - context.state.employed)})`
+      `Unemployed (${Math.abs(
+        context.state.graduates - context.state.employed
+      )})`
     ];
     employmentChart.data.datasets[0].data = [
       this.state.employed,
@@ -361,7 +365,7 @@ class UserManagementContainer extends React.Component {
       "200,000 - 500,000",
       "Greater than 500,000"
     ];
-    let extractNumber = job_salary.replace("s", "");
+    let extractNumber = job_salary.replace("s", "") - 1;
     return salary[parseInt(extractNumber)];
 
     // return salary[1]
@@ -821,7 +825,8 @@ class AddUserModal extends React.Component {
             sup.clearValue();
             $("#addUserModal").modal("hide");
             sup.props.fetchUsers();
-          } else if (data === "idTaken") {
+          } else {
+            alert(data);
             sup.setState({
               alert: "show",
               alertMessage: "Student Id Not Available"
