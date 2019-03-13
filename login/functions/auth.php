@@ -9,11 +9,17 @@ if($requestType == "auth"){
      $result = $connect->query($sql);
     if ($result->num_rows >0) {
         // code...
-        echo "success";
+       
+        
         while($row=$result->fetch_assoc()){
-            $_SESSION["user_id"] = $row['user_id'];
-            $_SESSION["username"] = $row['username'];
-            $_SESSION["user_type"] = $row['user_type'];
+            if($password == $row['password']){
+                echo "success";
+                $_SESSION["user_id"] = $row['user_id'];
+                $_SESSION["username"] = $row['username'];
+                $_SESSION["user_type"] = $row['user_type'];
+            }else{
+                echo "failed";
+            }
         }
     }
 }

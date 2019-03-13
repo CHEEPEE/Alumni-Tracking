@@ -21,7 +21,7 @@ class Login extends React.Component {
   login = () => {
     console.log(this.state);
     ajaxHandler({ ...this.state, requestType: "auth" }, data => {
-      if (isSuccess(data)) {
+      if (data.includes("success")) {
         window.location.href = "../admin";
       } else {
         alert("login Failed");
