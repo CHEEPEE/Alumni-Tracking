@@ -36,7 +36,7 @@
 </body>
 <script>
 let user_id = '<?php echo $_SESSION['user_id'];?>'
-let upload_dir =  "http://localhost/alumni-tracking-system/Alumni%20Tracking/upload/";
+let upload_dir =  "../upload/";
 </script>
 <!-- 
 <script type="text/babel" src="components/manageAccount.js"></script>
