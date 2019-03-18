@@ -9,8 +9,6 @@ if($requestType == "auth"){
      $result = $connect->query($sql);
     if ($result->num_rows >0) {
         // code...
-       
-        
         while($row=$result->fetch_assoc()){
             if($password == $row['password']){
                 echo "success";
@@ -18,9 +16,28 @@ if($requestType == "auth"){
                 $_SESSION["username"] = $row['username'];
                 $_SESSION["user_type"] = $row['user_type'];
             }else{
-                echo "failed";
+                echo "Wrong Password";
             }
         }
+    }else{
+        if(isEmailAvailable($email)){
+            echo "Wrong Password";
+        }else{
+            echo "Email not Available";
+        }
+    }
+}
+function isEmailAvailable($email){
+    include '../Database.php';
+    $sql = "SELECT * FROM alumni where email = '$email'";
+    $result = $connect->query($sql);
+    
+    if ($result->num_rows > 0) {
+        // output data of each row
+        echo "Email Taken";
+        return false;
+    } else {
+       return true;
     }
 }
 
