@@ -19,14 +19,18 @@ class EventManagementContainer extends React.Component {
     };
 
     let sup = this;
-    ajaxHandler(event, data => {
-      if (isSuccess(data)) {
-        getEvents();
-        clearValue(event);
-        $("#exampleModalCenter").modal("hide");
-        sup.getAlumni(event);
-      }
-    });
+    if (whatEvent != "" && whenEvent != "" && whereEvent != "") {
+      ajaxHandler(event, data => {
+        if (isSuccess(data)) {
+          getEvents();
+          clearValue(event);
+          $("#exampleModalCenter").modal("hide");
+          sup.getAlumni(event);
+        }
+      });
+    } else {
+      alert("Fill up All Fields");
+    }
   };
   viewRequest = () => {
     this.setState({
@@ -494,16 +498,23 @@ class UpdateRequestModal extends React.Component {
     };
 
     console.log(updateRequestData);
-
-    ajaxHandler(
-      { requestType: "updateMyRequest", ...updateRequestData },
-      data => {
-        if (data.trim() == "success") {
-          $("#updateRequestModal" + eventID).modal("toggle");
-          getEventsRequest();
+    if (
+      updateRequestData.whatEvent != "" &&
+      updateRequestData.whenEvent != "" &&
+      updateRequestData.whereEvent != ""
+    ) {
+      ajaxHandler(
+        { requestType: "updateMyRequest", ...updateRequestData },
+        data => {
+          if (data.trim() == "success") {
+            $("#updateRequestModal" + eventID).modal("toggle");
+            getEventsRequest();
+          }
         }
-      }
-    );
+      );
+    } else {
+      alert("Please Fill up All Fields");
+    }
   };
   componentDidMount() {
     console.log(this.props);

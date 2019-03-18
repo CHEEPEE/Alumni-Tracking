@@ -672,7 +672,10 @@ class UpdateSecurity extends React.Component {
   };
 
   updatePassword = () => {
-    if (this.state.alert === "") {
+    if (
+      this.state.alert === "" &&
+      isPasswordValidate(document.querySelector("#newPassword").value)
+    ) {
       ajaxHandler(
         {
           requestType: "changePassword",

@@ -396,7 +396,7 @@ class UserManagementContainer extends React.Component {
         </div>
         <div className="row">
           <div className="col">
-            <div className="form-group form-control-sm">
+            {/* <div className="form-group form-control-sm">
               <label for="exampleInputEmail1">
                 <small>Search User</small>
               </label>
@@ -407,7 +407,7 @@ class UserManagementContainer extends React.Component {
                 aria-describedby="emailHelp"
                 placeholder="Enter Username"
               />
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="row mt-5 pl-1">
@@ -796,11 +796,12 @@ class AddUserModal extends React.Component {
 
     console.log(this.userProperty);
     let userProperty = this.userProperty;
-    if (true) {
+    
+    if (isPasswordValidate(document.querySelector("#addUserPassword").value) && isEmailValid(email) && studentId != "" ) {
       this.setState({
         alert: "d-none"
       });
-
+      $("#addUserModal").modal("toggle");
       $.ajax({
         url: "functions/index.php",
         method: "POST",
@@ -826,6 +827,7 @@ class AddUserModal extends React.Component {
             $("#addUserModal").modal("hide");
             sup.props.fetchUsers();
           } else {
+           
             alert(data);
             sup.setState({
               alert: "show",
