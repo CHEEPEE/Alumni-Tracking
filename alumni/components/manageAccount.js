@@ -190,23 +190,36 @@ class UpdateProfile extends React.Component {
     let course = $("#course").val();
     let user_type = $("#user_type").val();
     let batch = $("#batch").val();
-
+    let userDetails = {
+      first_name: first_name,
+      middle_name: middle_name,
+      last_name: last_name,
+      email: email,
+      birthdate: birthdate,
+      gender: gender,
+      address: address,
+      contact_number: contact_number,
+      permanent_address: permanent_address,
+      course: course,
+      user_type: user_type,
+      batch: batch
+    };
     if (
-      batch == "" ||
-      first_name == "" ||
-      middle_name == "" ||
-      last_name == "" ||
-      email == "" ||
-      birthdate == "" ||
-      gender == "" ||
-      address == "" ||
-      permanent_address == "" ||
-      course == "" ||
-      contact_number == "" ||
-      user_type == ""
+      // batch == "" ||
+      // first_name == "" ||
+      // middle_name == "" ||
+      // last_name == "" ||
+      // email == "" ||
+      // birthdate == "" ||
+      // gender == "" ||
+      // address == "" ||
+      // permanent_address == "" ||
+      // course == "" ||
+      // contact_number == "" ||
+      // user_type == ""
+
+      isUserDetailsValidate(userDetails)
     ) {
-      alert("Please Fill up All fields");
-    } else {
       ajaxHandler({ ...this.state, requestType: "updateProfile" }, data => {
         if (data == "success") {
           alert("Account Updated");
@@ -405,7 +418,7 @@ class UpdateProfile extends React.Component {
                       this.setState({
                         number: text.target.value
                       });
-                      if ((text.target.val + "").length >= 9) {
+                      if ((text.target.val + "").length >= 10) {
                         document.querySelector("#number").value = (
                           text.target.value + ""
                         ).substring(0, 9);
@@ -654,7 +667,8 @@ class UpdateSecurity extends React.Component {
     newPassword: "",
     confirmPassword: "",
     alert: "",
-    success: ""
+    success: "",
+    isShowPassword: false
   };
 
   updatePassword = () => {
@@ -716,7 +730,7 @@ class UpdateSecurity extends React.Component {
                   </small>
                   <input
                     id="oldPassword"
-                    type="password"
+                    type={this.state.isShowPassword ? "text" : "password"}
                     onChange={text => {
                       this.setState({
                         oldPassword: text.target.value
@@ -727,6 +741,24 @@ class UpdateSecurity extends React.Component {
                     class="form-control mt-1 form-control-sm"
                     aria-describedby="emailHelp"
                   />
+                </div>
+                <div className="form-group">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="gridCheck"
+                      onChange={text => {
+                        this.setState({
+                          isShowPassword: text.target.checked
+                        });
+                      }}
+                    />
+
+                    <label class="form-check-label" for="gridCheck">
+                      Show Password
+                    </label>
+                  </div>
                 </div>
                 <div class="form-group">
                   <small class="form-text font-weight-bold text-muted">

@@ -16,7 +16,8 @@ class MainContainer extends React.Component {
 class Login extends React.Component {
   state = {
     userName: "",
-    password: ""
+    password: "",
+    isShowPassword: false
   };
   login = () => {
     console.log(this.state);
@@ -63,7 +64,7 @@ class Login extends React.Component {
               <div className="form-group">
                 <label for="exampleInputPassword1">Password</label>
                 <input
-                  type="password"
+                  type={this.state.isShowPassword ? "text" : "password"}
                   onChange={text => {
                     this.setState({
                       password: text.target.value
@@ -74,6 +75,24 @@ class Login extends React.Component {
                   id="exampleInputPassword1"
                   placeholder="Password"
                 />
+              </div>
+              <div className="form-group">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="gridCheck"
+                    onChange={text => {
+                      this.setState({
+                        isShowPassword: text.target.checked
+                      });
+                    }}
+                  />
+
+                  <label class="form-check-label" for="gridCheck">
+                    Show Password
+                  </label>
+                </div>
               </div>
               {/* <div className="form-group form-check">
                 <input
@@ -114,51 +133,60 @@ class Register extends React.Component {
     studentId: "",
     password: "",
     confirmPassword: "",
-    alert:"",
-    email:"",
+    alert: "",
+    email: ""
   };
-  register = () =>{
-    if(this.validate()){
+  register = () => {
+    if (this.validate()) {
       ajaxHandler({ ...this.state, requestType: "registerAccount" }, data => {
         if (isSuccess(data)) {
           window.location.href = "../admin";
         } else {
           alert("Register Failed");
-          console.log(data)
+          console.log(data);
         }
       });
     }
-  }
+  };
 
-  confirmPassword =()=>{
-    if(document.querySelector("#password").value !== document.querySelector("#confirmPassword").value){
-        this.setState({
-          alert:"Password doesn't match"
-        })
-    }else{
+  confirmPassword = () => {
+    if (
+      document.querySelector("#password").value !==
+      document.querySelector("#confirmPassword").value
+    ) {
       this.setState({
-        alert:""
-      })
+        alert: "Password doesn't match"
+      });
+    } else {
+      this.setState({
+        alert: ""
+      });
     }
-  }
-  validateId = () =>{
-    ajaxHandler({ studentId:document.querySelector("#studentId").value, requestType: "findId" }, data => {
-      if (data.trim() == "Already Exist") {
-        this.setState({
-          alert:"ID taken"
-        })
-      }else{
-        this.setState({
-          alert:""
-        })
+  };
+  validateId = () => {
+    ajaxHandler(
+      {
+        studentId: document.querySelector("#studentId").value,
+        requestType: "findId"
+      },
+      data => {
+        if (data.trim() == "Already Exist") {
+          this.setState({
+            alert: "ID taken"
+          });
+        } else {
+          this.setState({
+            alert: ""
+          });
+        }
       }
-    });
-  }
-  validate(){
-    if(this.state.alert.trim()==0){
-      return true
+    );
+  };
+  validate() {
+    if (this.state.alert.trim() == 0) {
+      return true;
     }
-    return false
+    return false;
   }
 
   render() {
@@ -174,20 +202,20 @@ class Register extends React.Component {
               className="w-100 pl-3"
               onSubmit={e => {
                 e.preventDefault();
-                this.register()
+                this.register();
               }}
             >
               <div className="form-group">
                 <label for="exampleInputEmail1">Student ID</label>
                 <input
                   type="text"
-                  id = "studentId"
+                  id="studentId"
                   className="form-control form-control-sm"
                   onChange={text => {
                     this.setState({
                       studentId: text.target.value
                     });
-                    this.validateId()
+                    this.validateId();
                   }}
                   defaultValue={this.state.studentId}
                   aria-describedby="emailHelp"
@@ -214,13 +242,13 @@ class Register extends React.Component {
               <div className="form-group">
                 <label for="exampleInputPassword1">Password</label>
                 <input
-                  id = "password"
+                  id="password"
                   type="password"
                   onChange={text => {
                     this.setState({
                       password: text.target.value
                     });
-                    this.confirmPassword()
+                    this.confirmPassword();
                   }}
                   defaultValue={this.state.password}
                   className="form-control form-control-sm"
@@ -231,13 +259,13 @@ class Register extends React.Component {
               <div className="form-group">
                 <label for="exampleInputPassword1">Confimr Password</label>
                 <input
-                  id = "confirmPassword"
+                  id="confirmPassword"
                   type="password"
                   onChange={text => {
                     this.setState({
                       confirmPassword: text.target.value
                     });
-                    this.confirmPassword()
+                    this.confirmPassword();
                   }}
                   defaultValue={this.state.confirmPassword}
                   className="form-control form-control-sm"
@@ -245,7 +273,9 @@ class Register extends React.Component {
                   required
                 />
               </div>
-              {this.state.alert.trim().length==0?"":errorHandler(this.state.alert)}
+              {this.state.alert.trim().length == 0
+                ? ""
+                : errorHandler(this.state.alert)}
               <button type="submit" className="btn btn-sm btn-primary">
                 Register
               </button>

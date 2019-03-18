@@ -36,7 +36,7 @@
     </div>
 </body>
 <script>
-let upload_dir =  "http://localhost/alumni-tracking-system/Alumni%20Tracking/upload/";
+let upload_dir =  "./upload/";
 </script>
 <script type="text/babel" src="main.js"></script>
 </html>

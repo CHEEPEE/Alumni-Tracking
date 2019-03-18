@@ -95,7 +95,7 @@
 </body>
 <script>
 let user_id = '<?php echo $_SESSION['user_id'];?>'
-let upload_dir =  "http://localhost/alumni-tracking-system/Alumni%20Tracking/upload/";
+let upload_dir =  "../upload/";
 </script>
 <script src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js'></script>
 <script type="text/babel" src="../utils/utils.js"></script>
