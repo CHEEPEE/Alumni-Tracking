@@ -1050,7 +1050,7 @@ class AlumniListItem extends React.Component {
               View
             </button>
           </div>
-          <div className="col-1">
+          {/* <div className="col-1">
             <button
               type="button"
               onClick={() => {
@@ -1060,7 +1060,7 @@ class AlumniListItem extends React.Component {
             >
               Delete
             </button>
-          </div>
+          </div> */}
         </div>
         <div
           className="modal fade"
