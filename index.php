@@ -34,6 +34,11 @@
     <div class = "container-fluid zero h-100" id = "main">
    
     </div>
+    <div class = "footer">
+    <center>
+      Copyright © UA-CCS Alumni Information System 2018
+    </center>
+    </div>
 </body>
 <script>
 let upload_dir =  "./upload/";

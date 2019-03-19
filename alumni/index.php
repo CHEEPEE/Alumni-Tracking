@@ -99,24 +99,24 @@
                         aria-selected="false"><i class="material-icons align-middle mr-2">
                             event
                         </i><small> Advertisement</small></a>
-                    <!-- <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings"
+                    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings"
                         aria-selected="false"><i class="material-icons align-middle mr-2">
                             info
-                        </i><small> About UA-CCS</small></a> -->
+                        </i><small> About UA-CCS</small></a>
                 </div>
             </div>
             <div class="col-10 zero" id="mainContainer">
 
             </div>
         </div>
-    </div>
-   
+    </div> 
 </body>
 <script>
 let user_id = '<?php echo $_SESSION['user_id'];?>'
 let upload_dir =  "../upload/";
 </script>
 <script type="text/babel" src="../utils/utils.js"></script>
+<script type="text/babel" src="components/about.js"></script>
 <script type="text/babel" src="components/manageAccount.js"></script>
 <script type="text/babel" src="components/work.js"></script>
 <script type="text/babel" src="components/events.js"></script>

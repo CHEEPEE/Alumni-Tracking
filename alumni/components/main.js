@@ -34,7 +34,7 @@ class MainContainer extends React.Component {
               role="tabpanel"
               aria-labelledby="v-pills-settings-tab"
             >
-              ...
+              <AboutContainer/>
             </div>
           </div>
         </React.Fragment>
