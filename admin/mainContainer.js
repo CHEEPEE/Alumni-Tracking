@@ -796,8 +796,12 @@ class AddUserModal extends React.Component {
 
     console.log(this.userProperty);
     let userProperty = this.userProperty;
-    
-    if (isPasswordValidate(document.querySelector("#addUserPassword").value) && isEmailValid(email) && studentId != "" ) {
+
+    if (
+      isPasswordValidate(document.querySelector("#addUserPassword").value) &&
+      isEmailValid(email) &&
+      studentId != ""
+    ) {
       this.setState({
         alert: "d-none"
       });
@@ -824,10 +828,10 @@ class AddUserModal extends React.Component {
           console.log(data);
           if (data.includes("success")) {
             sup.clearValue();
+            alert("Student Registerd Successfully");
             $("#addUserModal").modal("hide");
             sup.props.fetchUsers();
           } else {
-           
             alert(data);
             sup.setState({
               alert: "show",
