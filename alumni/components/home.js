@@ -8,35 +8,35 @@ class ManageHomeContainer extends React.Component {
             <div
               id="carouselExampleControls"
               className="carousel slide w-100"
-              data-ride="carousel"
+              data-ride="carousel" style = {{height:"600px"}}
             >
               <div className="carousel-inner h-100 w-100">
                 <div className="carousel-item h-100 w-100 active">
                   <div
-                    className="d-block h-100 w-100"
+                    className="d-block car-img h-100 w-100"
                     style={{
                       backgroundImage: `url(${upload_dir + "ua.jpg"})`,
-                      heigth: "200px"
+                      height: "600px"
                     }}
                     alt="First slide"
                   />
                 </div>
                 <div className="carousel-item h-100 w-100">
                   <div
-                    className="d-block h-100 w-100"
+                    className="d-block car-img h-100 w-100"
                     style={{
                       backgroundImage: `url(${upload_dir + "uaa.jpg"})`,
-                      heigth: "200px"
+                      height: "600px",
                     }}
                     alt="Second slide"
                   />
                 </div>
-                <div className="carousel-item h-100 w-100">
+                <div className="carousel-item  h-100 w-100">
                   <div
-                    className="d-block h-100 w-100"
+                    className="d-block car-img  h-100 w-100"
                     style={{
                       backgroundImage: `url(${upload_dir + "uu.jpg"})`,
-                      heigth: "200px"
+                      height: "600px"
                     }}
                     alt="Third slide"
                   />
@@ -68,7 +68,7 @@ class ManageHomeContainer extends React.Component {
               </a>
             </div>
           </div>
-          <div className="row">
+          <div className="row mt-5">
             <div className="col">
               <h1>
                 University of Antique College of Computer Studies Alumni

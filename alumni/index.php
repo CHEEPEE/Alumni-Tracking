@@ -32,6 +32,12 @@
         .nav-pills .nav-link.active{
             background-color:red !important;
         }
+        .car-img {
+            height:600px;
+            background-size:cover;
+            background-origin: content-box;
+            background-position: center;
+        }
     </style>
 </head>
 
