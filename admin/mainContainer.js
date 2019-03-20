@@ -947,6 +947,9 @@ class AddUserModal extends React.Component {
                     <button type="submit" className="btn btn-sm btn-primary">
                       Register
                     </button>
+                    <button type="button" data-dismiss="modal" className="btn ml-3 btn-sm btn-danger">
+                      Cancel
+                    </button>
                   </form>
                 </div>
               </div>

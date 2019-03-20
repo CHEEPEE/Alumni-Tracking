@@ -101,6 +101,20 @@ class AboutContainer extends React.Component {
               Conduct periodic management review for quality delivery of service
               to the stakeholders.
             </div>
+            <div
+              className="row mt-3"
+              style={{
+                borderRadius: 15,
+                display: "flex",
+                justifyContent: "center"
+              }}
+            >
+              <center>
+                <div class="alert alert-danger" role="alert">
+                  Copyright © UA-CCS Alumni Information System 2018
+                </div>
+              </center>
+            </div>
           </div>
         </div>
       </React.Fragment>

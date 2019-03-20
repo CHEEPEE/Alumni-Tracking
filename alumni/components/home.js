@@ -8,7 +8,8 @@ class ManageHomeContainer extends React.Component {
             <div
               id="carouselExampleControls"
               className="carousel slide w-100"
-              data-ride="carousel" style = {{height:"600px"}}
+              data-ride="carousel"
+              style={{ height: "600px" }}
             >
               <div className="carousel-inner h-100 w-100">
                 <div className="carousel-item h-100 w-100 active">
@@ -26,7 +27,7 @@ class ManageHomeContainer extends React.Component {
                     className="d-block car-img h-100 w-100"
                     style={{
                       backgroundImage: `url(${upload_dir + "uaa.jpg"})`,
-                      height: "600px",
+                      height: "600px"
                     }}
                     alt="Second slide"
                   />
@@ -136,6 +137,20 @@ class ManageHomeContainer extends React.Component {
                 </div>
               </div>
             </div>
+          </div>
+          <div
+            className="row mt-3"
+            style={{
+              borderRadius: 15,
+              display: "flex",
+              justifyContent: "center"
+            }}
+          >
+            <center>
+              <div class="alert alert-danger" role="alert">
+                Copyright © UA-CCS Alumni Information System 2018
+              </div>
+            </center>
           </div>
         </div>
       </React.Fragment>
