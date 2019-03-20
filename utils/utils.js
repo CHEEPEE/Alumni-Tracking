@@ -43,10 +43,7 @@ function isUserDetailsValidate(userDetails) {
     alert("Please Fill up All fields");
     return false;
   } else {
-    return (
-      isEmailValid(email) &&
-      isNumberValid(contact_number)
-    );
+    return isEmailValid(email) && isNumberValid(contact_number);
   }
 }
 
@@ -86,6 +83,26 @@ function isSuccess(data) {
     return true;
   }
   console.log(data);
+}
+
+function isUserIdValid(userId) {
+  let userIdAr = userId.split("-");
+  if (
+    userIdAr.length != 3 ||
+    userIdAr[0].length != 4 ||
+    userIdAr[1].length != 4 ||
+    userIdAr[2].length != 1
+  ) {
+    alert("Invalid User ID");
+    return false;
+  } else if (!/^\d+$/.test(userIdAr[0]) || !/^\d+$/.test(userIdAr[1])) {
+    alert("Invalid User ID");
+    return false;
+  } else if (/^\d+$/.test(userIdAr[2])) {
+    alert("Invalid User ID");
+    return false;
+  }
+  return true;
 }
 
 function clearValue(data) {

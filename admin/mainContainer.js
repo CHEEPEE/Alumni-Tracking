@@ -800,6 +800,7 @@ class AddUserModal extends React.Component {
     if (
       isPasswordValidate(document.querySelector("#addUserPassword").value) &&
       isEmailValid(email) &&
+      isUserIdValid(studentId) &&
       studentId != ""
     ) {
       this.setState({
