@@ -18,16 +18,18 @@ class MainContainer extends React.Component {
         <div
           style={{
             height: "130%",
-            backgroundImage: `url(${upload_dir + "uu.jpg"})`,
-            backgroundAttachment:"fixed",
-            backgroundSize: "cover",
+            backgroundImage: `url(${upload_dir + "landing-bg.jpg"})`,
+            backgroundAttachment: "fixed",
+            backgroundSize: "cover"
           }}
           className="row"
         >
           <div className="container d-flex align-content-between flex-wrap zero">
             <div className="row w-100">
               <div className="col text-center align-self-center">
-                <h1 style = {{paddingTop:200,color:"red",fontSize:"5em"}}>UA-CCS Alumni Information System</h1>
+                <h1 style={{ paddingTop: 200, color: "red", fontSize: "5em" }}>
+                  UA-CCS Alumni Information System
+                </h1>
               </div>
             </div>
             <div className="row w-100">
@@ -52,6 +54,11 @@ class MainContainer extends React.Component {
               students academic support services to attain holistic development.
               we believe that the attainment of the university's vision is a
               partnership between the university and the students.
+            </div>
+            <div className="row w-100 text-white d-flex justify-content-center">
+              <div className="col mb-2 col-auto text-align-center font-weight-bold">
+                Copyright © UA-CCS Alumni Information System 2018
+              </div>
             </div>
           </div>
         </div>

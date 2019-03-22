@@ -13,6 +13,11 @@
     <style>
         html,body {
             height: 100%;
+            background-image: url("../upload/ccs.jpg");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center; 
+            background-size: cover;
         }
         .zero{
             padding:0px;

@@ -437,9 +437,6 @@ class UserManagementContainer extends React.Component {
           <div className="col-1 font-weight-bold">
             <small />
           </div>
-          <div className="col-1 font-weight-bold">
-            <small />
-          </div>
         </div>
         <div className="w-100" id="studentListContainer" />
 
@@ -635,6 +632,19 @@ class UserManagementContainer extends React.Component {
                     >
                       <div className="mt-3" id="businessesContainer" />
                     </div>
+                  </div>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <div className="row ml-1 mb-3">
+                    <button
+                      type="button"
+                      data-dismiss="modal"
+                      className="btn ml-3 btn-sm btn-danger"
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </div>
               </div>
@@ -947,7 +957,11 @@ class AddUserModal extends React.Component {
                     <button type="submit" className="btn btn-sm btn-primary">
                       Register
                     </button>
-                    <button type="button" data-dismiss="modal" className="btn ml-3 btn-sm btn-danger">
+                    <button
+                      type="button"
+                      data-dismiss="modal"
+                      className="btn ml-3 btn-sm btn-danger"
+                    >
                       Cancel
                     </button>
                   </form>
@@ -1130,6 +1144,13 @@ class AlumniListItem extends React.Component {
                       >
                         Update
                       </div>
+                      <button
+                        type="button"
+                        data-dismiss="modal"
+                        className="btn ml-3 btn-sm btn-danger"
+                      >
+                        Cancel
+                      </button>
                     </div>
                   </div>
                 </div>
